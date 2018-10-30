@@ -18,7 +18,6 @@
         </activity>
         <activity android:name=".Record" />
         <activity android:name=".ViewRecording" />
-        <activity android:name=".activity_record"></activity>
     </application>
 
 </manifest>

@@ -13,7 +13,7 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
     }
 
-    public void record(View view) {
+    public void goTorecord(View view) {
         Intent intent = new Intent(this, Record.class);
         startActivity(intent);
     }
