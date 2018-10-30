@@ -8,7 +8,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/pauseButton"
+        android:id="@+id/pauseplayButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -21,18 +21,19 @@
         app:srcCompat="@drawable/stop_icon" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/MarkButton"
+        android:id="@+id/markButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="388dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
         app:backgroundTint="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/pauseButton"
+        app:layout_constraintBottom_toTopOf="@+id/pauseplayButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.953"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.968"
         app:srcCompat="@drawable/mark_pinkicon" />
 
     <EditText
