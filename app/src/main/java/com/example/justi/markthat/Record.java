@@ -20,17 +20,17 @@ public class Record extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(recordTitle);
         }
-        //alt method that dont work
-        //ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        //change title of page
-       // setTitle(recordTitle);
 
     }
     public boolean onOptionsItemSelected(MenuItem item){ //back button
-        Intent myIntent = new Intent(getApplicationContext(), Home.class);
-        startActivityForResult(myIntent, 0);
-        return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //your intent
+                Intent myIntent = new Intent(getApplicationContext(), Home.class);
+                startActivityForResult(myIntent, 0);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 }
