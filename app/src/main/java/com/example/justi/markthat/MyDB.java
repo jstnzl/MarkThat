@@ -29,59 +29,64 @@ public class MyDB extends SQLiteOpenHelper {
 
     Context ctx;
     SQLiteDatabase db;
-    private static String DB_NAME = "recordings";
-    private static String TABLE_NAME = "record_table";
+    private static String DB_NAME = "records";
     private  static int VERSION = 1;
 
-    public MyDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public MyDB(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DB_NAME, null, VERSION);
         ctx = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + "(filepath String primary key, title String, description String);");
+        db.execSQL("create table recordTable(filepath String primary key, title String, description String, foreign key(filepath) references markTable(path));");
+        db.execSQL("create table markTable(path String primary key, title String, description String);");
         Toast.makeText(ctx, "DB is created", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists " + TABLE_NAME);
+        db.execSQL("drop table if exists recordTable");
+        db.execSQL("drop table if exists markTable");
         VERSION++;
         onCreate(db);
     }
 
-    public long insert(String blob, String s2){
+    public void insert(String filepath, String title, String description){
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("url", blob);
-        cv.put("title", s2);
-        return db.insert(TABLE_NAME, null, cv);
+        cv.put("filepath", filepath);
+        cv.put("title", title);
+        cv.put("description", description);
+        db.insert("recordTable", null, cv);
+        ContentValues vc = new ContentValues();
+        vc.put("filepath", filepath);
+        db.insert("markTable", null, cv);
     }
 
     public ArrayList<String> getAll(){
         ArrayList<String> res = new ArrayList<>();
         db = getReadableDatabase();
-        Cursor cr = db.rawQuery("select * from " + TABLE_NAME + ";", null );
+        Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
             res.add(cr.getString(0) + "          " + cr.getString(2)+","+cr.getString(1));
         }
         cr.close();
         return res;
     }
-    public boolean delete(String s){
-        db = getWritableDatabase();
-        int deletedRows = 0;
-        deletedRows += db.delete(TABLE_NAME, "title= ?", new String[]{s});
-        deletedRows += db.delete(TABLE_NAME, "id= ?", new String[]{s});
-        return deletedRows > 0;
-    }
-
-    public void update(String s1, String s2){
-        db = getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("url", s1);
-        cv.put("title", s2);
-        db.update(TABLE_NAME, cv,  "url = ?", new String[]{s1});
-    }
+//    public boolean delete(String s){
+//        db = getWritableDatabase();
+//        int deletedRows = 0;
+//        deletedRows += db.delete("recordTable", "title= ?", new String[]{s});
+//        deletedRows += db.delete("recordTable", "id= ?", new String[]{s});
+//        return deletedRows > 0;
+//    }
+//
+//    public void update(String s1, String s2){
+//        db = getWritableDatabase();
+//        ContentValues cv = new ContentValues();
+//        cv.put("url", s1);
+//        cv.put("title", s2);
+//        db.update("recordTable", cv,  "url = ?", new String[]{s1});
+//    }
 }

@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
@@ -33,6 +34,10 @@ import java.io.IOException;
 public class Record extends AppCompatActivity {
     private boolean recording = false;
     private MediaRecorder recorder = null;
+    MyDB db;
+    EditText title;
+    EditText description;
+    String fullPath;
 
     String[] permissions = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -43,8 +48,11 @@ public class Record extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
         recordButton.setOnClickListener(buttonListeners);
+        title = findViewById(R.id.title);
+        description = findViewById(R.id.description);
     }
 
     private View.OnClickListener buttonListeners = new View.OnClickListener() {
@@ -74,11 +82,12 @@ public class Record extends AppCompatActivity {
     };
 
     private void startRecording() {
+        getFilename();
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(getFilename());
+        recorder.setOutputFile(fullPath);
         try {
             recorder.prepare();
             recorder.start();
@@ -98,6 +107,7 @@ public class Record extends AppCompatActivity {
                 recorder.reset();
                 recorder.release();
                 recorder = null;
+                db.insert(fullPath, title.getText().toString(), description.getText().toString());
             }
             catch(RuntimeException e) {
                 Log.w("Error stopping recording", e.toString());
@@ -107,7 +117,7 @@ public class Record extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No recording found!", Toast.LENGTH_SHORT).show();
     }
 
-    private String getFilename() {
+    private void getFilename() {
         String name = "/" + System.currentTimeMillis() + ".mp4";
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat";
         try {
@@ -115,13 +125,11 @@ public class Record extends AppCompatActivity {
             if(!dir.exists()) {
                 dir.mkdirs();
             }
-            String fullPath = dir.getAbsolutePath() + name;
-            return (fullPath);
+            fullPath = dir.getAbsolutePath() + name;
         }
         catch(Exception e) {
             Log.w("Creating file error", e.toString());
         }
-        return null;
     }
 
     //Requesting run-time permissions
