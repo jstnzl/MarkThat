@@ -29,7 +29,7 @@ public class MyDB extends SQLiteOpenHelper {
 
     Context ctx;
     SQLiteDatabase db;
-    private static String DB_NAME = "records";
+    private static String DB_NAME = "recording-test";
     private  static int VERSION = 1;
 
     public MyDB(Context context, SQLiteDatabase.CursorFactory factory, int version) {
@@ -39,9 +39,8 @@ public class MyDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table recordTable(filepath String primary key, title String, description String, foreign key(filepath) references markTable(path));");
-        db.execSQL("create table markTable(path String primary key, title String, description String);");
-        Toast.makeText(ctx, "DB is created", Toast.LENGTH_LONG).show();
+        db.execSQL("create table recordTable(fileName String primary key, title String, description String, foreign key(fileName) references markTable(file));");
+        db.execSQL("create table markTable(file String primary key, title String, description String);");
     }
 
     @Override
@@ -52,28 +51,32 @@ public class MyDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insert(String filepath, String title, String description){
+    public void insert(String fileName, String title, String description){
+        if(title.matches(""))
+            title = "Recording-"+fileName;
+        if(description.matches(""))
+            description = "No description yet";
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("filepath", filepath);
+        cv.put("fileName", fileName);
         cv.put("title", title);
         cv.put("description", description);
         db.insert("recordTable", null, cv);
         ContentValues vc = new ContentValues();
-        vc.put("filepath", filepath);
+        vc.put("file", fileName);
         db.insert("markTable", null, cv);
     }
 
-    public ArrayList<String> getAll(){
-        ArrayList<String> res = new ArrayList<>();
-        db = getReadableDatabase();
-        Cursor cr = db.rawQuery("select * from recordTable;", null );
-        while(cr.moveToNext()){
-            res.add(cr.getString(0) + "          " + cr.getString(2)+","+cr.getString(1));
-        }
-        cr.close();
-        return res;
-    }
+//    public ArrayList<String> getAll(){
+//        ArrayList<String> res = new ArrayList<>();
+//        db = getReadableDatabase();
+//        Cursor cr = db.rawQuery("select * from recordTable;", null );
+//        while(cr.moveToNext()){
+//            res.add(cr.getString(0) + "          " + cr.getString(2)+","+cr.getString(1));
+//        }
+//        cr.close();
+//        return res;
+//    }
 //    public boolean delete(String s){
 //        db = getWritableDatabase();
 //        int deletedRows = 0;

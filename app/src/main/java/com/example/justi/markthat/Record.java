@@ -37,7 +37,7 @@ public class Record extends AppCompatActivity {
     MyDB db;
     EditText title;
     EditText description;
-    String fullPath;
+    String fileName;
 
     String[] permissions = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -82,12 +82,11 @@ public class Record extends AppCompatActivity {
     };
 
     private void startRecording() {
-        getFilename();
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(fullPath);
+        recorder.setOutputFile(getFilename());
         try {
             recorder.prepare();
             recorder.start();
@@ -107,7 +106,7 @@ public class Record extends AppCompatActivity {
                 recorder.reset();
                 recorder.release();
                 recorder = null;
-                db.insert(fullPath, title.getText().toString(), description.getText().toString());
+                db.insert(fileName, title.getText().toString(), description.getText().toString());
             }
             catch(RuntimeException e) {
                 Log.w("Error stopping recording", e.toString());
@@ -117,19 +116,21 @@ public class Record extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No recording found!", Toast.LENGTH_SHORT).show();
     }
 
-    private void getFilename() {
-        String name = "/" + System.currentTimeMillis() + ".mp4";
-        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat";
+    private String getFilename() {
+        String name = System.currentTimeMillis() + ".mp4";
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/";
         try {
             File dir = new File(rootPath);
             if(!dir.exists()) {
                 dir.mkdirs();
             }
-            fullPath = dir.getAbsolutePath() + name;
+            fileName = name;
+            return rootPath+name;
         }
         catch(Exception e) {
             Log.w("Creating file error", e.toString());
         }
+        return null;
     }
 
     //Requesting run-time permissions
