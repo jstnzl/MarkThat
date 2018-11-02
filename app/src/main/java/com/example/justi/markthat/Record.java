@@ -1,8 +1,6 @@
 package com.example.justi.markthat;
 
 import android.Manifest;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -13,13 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-=======
->>>>>>> Trying to get record to work
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-=======
->>>>>>> Creates file, starts recording, needs stop
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -126,7 +120,8 @@ public class Record extends AppCompatActivity {
             if(!dir.exists()) {
                 dir.mkdirs();
             }
-            return (dir.getAbsolutePath() + name);
+            String fullPath = dir.getAbsolutePath() + name;
+            return (fullPath);
         }
         catch(Exception e) {
             Log.w("Creating file error", e.toString());
