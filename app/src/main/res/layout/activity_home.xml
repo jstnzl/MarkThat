@@ -251,6 +251,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
+        android:id="@+id/recording_listview"
         android:layout_width="387dp"
         android:layout_height="253dp"
         android:layout_marginStart="8dp"
@@ -262,5 +263,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.946" />
+
+
 
 </android.support.constraint.ConstraintLayout>
