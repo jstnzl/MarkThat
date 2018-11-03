@@ -29,7 +29,7 @@ public class MyDB extends SQLiteOpenHelper {
 
     Context ctx;
     SQLiteDatabase db;
-    private static String DB_NAME = "recording-test";
+    private static String DB_NAME = "recording-test1";
     private  static int VERSION = 1;
 
     public MyDB(Context context, SQLiteDatabase.CursorFactory factory, int version) {
@@ -64,7 +64,9 @@ public class MyDB extends SQLiteOpenHelper {
         db.insert("recordTable", null, cv);
         ContentValues vc = new ContentValues();
         vc.put("file", fileName);
-        db.insert("markTable", null, cv);
+        vc.put("title", "Mark");
+        vc.put("description", "Description Goes Here");
+        db.insert("markTable", null, vc);
     }
 
 //    public ArrayList<String> getAll(){
