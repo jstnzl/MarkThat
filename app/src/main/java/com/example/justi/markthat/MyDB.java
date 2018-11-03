@@ -40,7 +40,7 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table recordTable(fileName String primary key, title String, description String, foreign key(fileName) references markTable(file));");
-        db.execSQL("create table markTable(file String primary key, title String, description String);");
+        db.execSQL("create table markTable(file String primary key, title String, description String, duration int);");
     }
 
     @Override
