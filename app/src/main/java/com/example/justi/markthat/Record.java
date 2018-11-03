@@ -28,6 +28,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -48,6 +50,7 @@ public class Record extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
         recordButton.setOnClickListener(buttonListeners);
