@@ -57,7 +57,7 @@
         app:layout_constraintVertical_bias="0.014" />
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/hr1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="2dp"
@@ -69,13 +69,13 @@
         app:layout_constraintTop_toBottomOf="@+id/search_recording_button" />
 
     <View
-        android:id="@+id/view3"
+        android:id="@+id/hr2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="186dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton2"
+        app:layout_constraintBottom_toTopOf="@+id/floating_action_button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <View
-        android:id="@+id/view2"
+        android:id="@+id/hr3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
@@ -110,7 +110,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
-        app:layout_constraintStart_toStartOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="@+id/hr2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.114" />
 
@@ -185,7 +185,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="@+id/hr2"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
