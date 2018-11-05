@@ -50,6 +50,8 @@ public class Record extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        //title
+        setTitle("MarkThat - Record");
         Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
@@ -156,5 +158,3 @@ public class Record extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
     }
 }
-
-

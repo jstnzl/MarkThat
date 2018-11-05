@@ -11,6 +11,8 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //title
+        setTitle("MarkThat - Home");
     }
 
     public void goTorecord(View view) {
