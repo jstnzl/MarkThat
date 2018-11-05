@@ -10,6 +10,11 @@ import android.widget.SimpleAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +48,6 @@ public class Home extends AppCompatActivity {
                 // get our date
                 String fileName = row.substring(0, commaSplit);
                 String dateTime = getDateFromMillis(fileName);
-                Log.i("time", dateTime);
                 datum.put("Title", title);
                 datum.put("Description", description);
                 datum.put("Date Recorded", dateTime);
@@ -60,7 +64,6 @@ public class Home extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        this.finish();
     }
 
     public void goTorecord(View view) {
@@ -70,8 +73,8 @@ public class Home extends AppCompatActivity {
 
     public String getDateFromMillis(String file) {
         long timeMillis = Long.parseLong(file.substring(0, file.length()-4));
-        Date dateTime = new Date(timeMillis);
-        DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy hh:mm");
-        return dateFormat.format(dateTime);
+        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeMillis), ZoneId.systemDefault());
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm");
+        return dateTime.format(dateFormat);
     }
 }
