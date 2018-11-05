@@ -75,7 +75,7 @@ public class MyDB extends SQLiteOpenHelper {
         Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
             // file, title, desc
-            res.add(cr.getString(0) + "," + cr.getString(2)+"&"+cr.getString(1));
+            res.add(cr.getString(0) + "," + cr.getString(1)+"&"+cr.getString(2));
         }
         cr.close();
         return res;

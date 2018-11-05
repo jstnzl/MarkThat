@@ -2,6 +2,7 @@ package com.example.justi.markthat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
@@ -156,5 +157,19 @@ public class Record extends AppCompatActivity {
     public void hideKeyboard(View view){
         InputMethodManager inputMethodManager=(InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        refreshActivity();
+        super.onBackPressed();
+    }
+
+    public void refreshActivity() {
+        Intent i = new Intent(this, Home.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+        finish();
+
     }
 }
