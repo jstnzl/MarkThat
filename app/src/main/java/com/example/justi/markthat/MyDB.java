@@ -29,7 +29,7 @@ public class MyDB extends SQLiteOpenHelper {
 
     Context ctx;
     SQLiteDatabase db;
-    private static String DB_NAME = "recording-test1";
+    private static String DB_NAME = "recording-test2";
     private  static int VERSION = 1;
 
     public MyDB(Context context, SQLiteDatabase.CursorFactory factory, int version) {
@@ -40,7 +40,7 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table recordTable(fileName String primary key, title String, description String, foreign key(fileName) references markTable(file));");
-        db.execSQL("create table markTable(file String primary key, title String, description String, duration int);");
+        db.execSQL("create table markTable(file String primary key, title String, description String, duration String);");
     }
 
     @Override
@@ -69,7 +69,19 @@ public class MyDB extends SQLiteOpenHelper {
         db.insert("markTable", null, vc);
     }
 
-//    public ArrayList<String> getAll(){
+    public ArrayList<String> getAllRecords(){
+        ArrayList<String> res = new ArrayList<>();
+        db = getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from recordTable;", null );
+        while(cr.moveToNext()){
+            // file, title, desc
+            res.add(cr.getString(0) + "," + cr.getString(2)+"&"+cr.getString(1));
+        }
+        cr.close();
+        return res;
+    }
+
+//    public ArrayList<String> getAllMarks(){
 //        ArrayList<String> res = new ArrayList<>();
 //        db = getReadableDatabase();
 //        Cursor cr = db.rawQuery("select * from recordTable;", null );
@@ -79,6 +91,7 @@ public class MyDB extends SQLiteOpenHelper {
 //        cr.close();
 //        return res;
 //    }
+
 //    public boolean delete(String s){
 //        db = getWritableDatabase();
 //        int deletedRows = 0;
