@@ -29,7 +29,7 @@ public class MyDB extends SQLiteOpenHelper {
 
     Context ctx;
     SQLiteDatabase db;
-    private static String DB_NAME = "recording-test2";
+    private static String DB_NAME = "MarkThat-DB";
     private  static int VERSION = 1;
 
     public MyDB(Context context, SQLiteDatabase.CursorFactory factory, int version) {
@@ -39,8 +39,9 @@ public class MyDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table recordTable(fileName String primary key, title String, description String, foreign key(fileName) references markTable(file));");
-        db.execSQL("create table markTable(file String primary key, title String, description String, duration String);");
+        db.execSQL("create table recordTable(fileName String primary key, title String, description String, folder String);");
+        db.execSQL("create table markTable(file String primary key, title String, description String, duration String, " +
+                    "foreign key(file) references recordTable(fileName) on delete cascade);");
     }
 
     @Override
@@ -51,9 +52,9 @@ public class MyDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insert(String fileName, String title, String description){
+    public void insertRecord(String fileName, String title, String description){
         if(title.matches(""))
-            title = "Recording-"+fileName;
+            title = "Recording-"+(countRecords(fileName)+1);
         if(description.matches(""))
             description = "No description yet";
         db = getWritableDatabase();
@@ -62,11 +63,19 @@ public class MyDB extends SQLiteOpenHelper {
         cv.put("title", title);
         cv.put("description", description);
         db.insert("recordTable", null, cv);
-        ContentValues vc = new ContentValues();
-        vc.put("file", fileName);
-        vc.put("title", "Mark");
-        vc.put("description", "Description Goes Here");
-        db.insert("markTable", null, vc);
+    }
+
+    public void insertMark(String fileName, String title, String description){
+        if(title.matches(""))
+            title = "Mark-"+(countMarks(fileName)+1);
+        if(description.matches(""))
+            description = "No description yet";
+        db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("file", fileName);
+        cv.put("title", "Mark");
+        cv.put("description", "Description Goes Here");
+        db.insert("markTable", null, cv);
     }
 
     public ArrayList<String> getAllRecords(){
@@ -74,37 +83,61 @@ public class MyDB extends SQLiteOpenHelper {
         db = getReadableDatabase();
         Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
-            // file, title, desc
-            res.add(cr.getString(0) + "," + cr.getString(1)+"&"+cr.getString(2));
+            // file, title, desc, folder
+            res.add(cr.getString(0) + "," + cr.getString(1)+"&"+cr.getString(2)+"+"+cr.getString(3));
         }
         cr.close();
         return res;
     }
 
-//    public ArrayList<String> getAllMarks(){
-//        ArrayList<String> res = new ArrayList<>();
-//        db = getReadableDatabase();
-//        Cursor cr = db.rawQuery("select * from recordTable;", null );
-//        while(cr.moveToNext()){
-//            res.add(cr.getString(0) + "          " + cr.getString(2)+","+cr.getString(1));
-//        }
-//        cr.close();
-//        return res;
-//    }
+    public ArrayList<String> getMarksForRecord(String fileName){
+        String[] params = new String[]{fileName};
+        ArrayList<String> res = new ArrayList<>();
+        db = getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from markTable where file= ?;", params);
+        while(cr.moveToNext()){
+            // file, title, desc, folder
+            res.add(cr.getString(0) + "," + cr.getString(1)+"&"+cr.getString(2)+"+"+cr.getString(3));
+        }
+        cr.close();
+        return res;
+    }
 
-//    public boolean delete(String s){
-//        db = getWritableDatabase();
-//        int deletedRows = 0;
-//        deletedRows += db.delete("recordTable", "title= ?", new String[]{s});
-//        deletedRows += db.delete("recordTable", "id= ?", new String[]{s});
-//        return deletedRows > 0;
-//    }
-//
-//    public void update(String s1, String s2){
-//        db = getWritableDatabase();
-//        ContentValues cv = new ContentValues();
-//        cv.put("url", s1);
-//        cv.put("title", s2);
-//        db.update("recordTable", cv,  "url = ?", new String[]{s1});
-//    }
+    public int countMarks(String fileName) {
+        String[] params = new String[]{fileName};
+        db = getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from markTable where file= ?;", params);
+        return cr.getCount();
+    }
+
+    public int countRecords(String fileName) {
+        String[] params = new String[]{fileName};
+        db = getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from recordTable where file= ?;", params);
+        return cr.getCount();
+    }
+
+    public void updateRecord(String file, String s1, String s2){
+        db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("title", s1);
+        cv.put("description", s2);
+        db.update("recordTable", cv,  "fileName = ?", new String[]{file});
+    }
+
+    public void updateMark(String file, String s1, String s2){
+        db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("title", s1);
+        cv.put("description", s2);
+        db.update("recordTable", cv,  "fileName = ?", new String[]{file});
+    }
+
+    public boolean delete(String s){
+        db = getWritableDatabase();
+        int deletedRows = 0;
+        deletedRows += db.delete("recordTable", "fileName= ?", new String[]{s});
+        return deletedRows > 0;
+    }
+
 }
