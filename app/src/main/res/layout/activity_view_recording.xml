@@ -55,7 +55,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="197dp"
             android:orientation="vertical">
 
             <TextView
@@ -104,6 +104,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.515" />
 
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="12dp"
+                android:paddingTop="10dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="8dp"
+                android:text="DELETE" />
+
 
         </LinearLayout>
 
@@ -134,10 +148,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.09" />
+        app:layout_constraintVertical_bias="0.093" />
 
     <TextView
         android:id="@+id/recent_recordings_title"
