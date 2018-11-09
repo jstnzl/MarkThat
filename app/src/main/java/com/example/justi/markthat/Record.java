@@ -83,8 +83,10 @@ public class Record extends AppCompatActivity {
                             startRecording();
                             recording = true;
                         }
-                        else
+                        else {
                             requestPermissions();
+                            Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     break;
                 case R.id.markButton:
@@ -121,7 +123,7 @@ public class Record extends AppCompatActivity {
                 recorder.reset();
                 recorder.release();
                 recorder = null;
-                db.insert(fileName, title.getText().toString(), description.getText().toString());
+                db.insertRecord(fileName, title.getText().toString(), description.getText().toString());
             }
             catch(RuntimeException e) {
                 Log.w("Error stopping recording", e.toString());

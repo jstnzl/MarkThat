@@ -45,6 +45,7 @@ public class Home extends AppCompatActivity {
         db = new MyDB(this, null, 1);
         List<String> dbResults = db.getAllRecords();
         myListView = (ListView)findViewById(R.id.recording_listview);
+        Log.i("size", dbResults.size()+"");
         if (dbResults.size() > 0) {
             int idx = 0;
             while (idx < dbResults.size()) {
@@ -53,7 +54,7 @@ public class Home extends AppCompatActivity {
                 int commaSplit = row.indexOf(',');
                 int andSplit = row.indexOf('&');
                 String title = row.substring(commaSplit+1, andSplit);
-                String description = row.substring(andSplit+1);
+                String description = row.substring(andSplit+1, row.length()-5);
                 // get our date
                 String fileName = row.substring(0, commaSplit);
                 String dateTime = getDateFromMillis(fileName);
