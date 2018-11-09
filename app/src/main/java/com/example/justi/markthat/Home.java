@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.support.v7.widget.Toolbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import java.util.Date;
 
 public class Home extends AppCompatActivity {
     MyDB db;
+    Toolbar toolbar;
     ListView myListView;
     List<Map<String, String>> data = new ArrayList<>();
 
@@ -30,8 +32,15 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //title
-        setTitle("MarkThat - Home");
+
+        //toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        //Set Title for toolbar
+        getSupportActionBar().setTitle("Home");
 
         db = new MyDB(this, null, 1);
         List<String> dbResults = db.getAllRecords();

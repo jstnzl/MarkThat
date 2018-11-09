@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -38,6 +39,7 @@ public class Record extends AppCompatActivity {
     private boolean recording = false;
     private MediaRecorder recorder = null;
     MyDB db;
+    Toolbar toolbar;
     EditText title;
     EditText description;
     String fileName;
@@ -51,8 +53,15 @@ public class Record extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-        //title
-        setTitle("MarkThat - Record");
+        //toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        //Set Title for toolbar
+        getSupportActionBar().setTitle("Record");
+
         Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
