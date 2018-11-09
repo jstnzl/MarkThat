@@ -3,6 +3,7 @@ package com.example.justi.markthat;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.BitmapFactory;
@@ -59,6 +60,7 @@ public class MyDB extends SQLiteOpenHelper {
             description = "No description yet";
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
+        Log.i("desc1", description);
         cv.put("fileName", fileName);
         cv.put("title", title);
         cv.put("description", description);
@@ -107,14 +109,16 @@ public class MyDB extends SQLiteOpenHelper {
         String[] params = new String[]{fileName};
         db = getReadableDatabase();
         Cursor cr = db.rawQuery("select * from markTable where file= ?;", params);
+        cr.moveToFirst();
         return cr.getCount();
     }
 
     public int countRecords(String fileName) {
         String[] params = new String[]{fileName};
         db = getReadableDatabase();
-        Cursor cr = db.rawQuery("select * from recordTable where file= ?;", params);
-        return cr.getCount();
+        long count = DatabaseUtils.queryNumEntries(db, "recordTable");
+        db.close();
+        return (int)count;
     }
 
     public void updateRecord(String file, String s1, String s2){
