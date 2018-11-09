@@ -1,13 +1,17 @@
 package com.example.justi.markthat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.support.v7.widget.Toolbar;
+
+import com.facebook.stetho.Stetho;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,11 +31,14 @@ public class Home extends AppCompatActivity {
     Toolbar toolbar;
     ListView myListView;
     List<Map<String, String>> data = new ArrayList<>();
+    List<List<String>> dbResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        db = new MyDB(this, null, 1);
+        Stetho.initializeWithDefaults(this);
 
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -43,23 +50,16 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setTitle("Home");
 
         db = new MyDB(this, null, 1);
-        List<String> dbResults = db.getAllRecords();
+        dbResults = db.getAllRecords();
         myListView = (ListView)findViewById(R.id.recording_listview);
-        Log.i("size", dbResults.size()+"");
         if (dbResults.size() > 0) {
             int idx = 0;
             while (idx < dbResults.size()) {
                 Map<String, String> datum = new HashMap<>();
-                String row = dbResults.get(idx);
-                int commaSplit = row.indexOf(',');
-                int andSplit = row.indexOf('&');
-                String title = row.substring(commaSplit+1, andSplit);
-                String description = row.substring(andSplit+1, row.length()-5);
-                // get our date
-                String fileName = row.substring(0, commaSplit);
-                String dateTime = getDateFromMillis(fileName);
-                datum.put("Title", title);
-                datum.put("Description", description);
+                List<String> row = dbResults.get(idx);
+                String dateTime = getDateFromFile(row.get(0));
+                datum.put("Title", row.get(1));
+                datum.put("Description", row.get(2));
                 datum.put("Date Recorded", dateTime);
                 data.add(datum);
                 idx++;
@@ -69,6 +69,18 @@ public class Home extends AppCompatActivity {
                 new String[] {"Title", "Description", "Date Recorded"},
                 new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDate });
         myListView.setAdapter(adapter);
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Intent intent = new Intent(view.getContext(), ViewRecording.class);
+                String[] info = new String[dbResults.get(position).size()];
+                info = dbResults.get(position).toArray(info);
+                intent.putExtra("RECORDING_INFO", info);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -81,10 +93,10 @@ public class Home extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public String getDateFromMillis(String file) {
+    public String getDateFromFile(String file) {
         long timeMillis = Long.parseLong(file.substring(0, file.length()-4));
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeMillis), ZoneId.systemDefault());
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         return dateTime.format(dateFormat);
     }
 }

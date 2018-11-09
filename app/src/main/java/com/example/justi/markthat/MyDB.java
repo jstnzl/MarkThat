@@ -64,6 +64,7 @@ public class MyDB extends SQLiteOpenHelper {
         cv.put("fileName", fileName);
         cv.put("title", title);
         cv.put("description", description);
+        cv.put("folder", "None");
         db.insert("recordTable", null, cv);
     }
 
@@ -75,18 +76,23 @@ public class MyDB extends SQLiteOpenHelper {
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("file", fileName);
-        cv.put("title", "Mark");
-        cv.put("description", "Description Goes Here");
+        cv.put("title", title);
+        cv.put("description", description);
         db.insert("markTable", null, cv);
     }
 
-    public ArrayList<String> getAllRecords(){
-        ArrayList<String> res = new ArrayList<>();
+    public List<List<String>> getAllRecords(){
+        List<List<String>> res = new ArrayList<>();
         db = getReadableDatabase();
         Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
+            ArrayList<String> temp = new ArrayList<>();
             // file, title, desc, folder
-            res.add(cr.getString(0) + "," + cr.getString(1)+"&"+cr.getString(2)+"+"+cr.getString(3));
+            temp.add(cr.getString(0));
+            temp.add(cr.getString(1));
+            temp.add(cr.getString(2));
+            temp.add(cr.getString(3));
+            res.add(temp);
         }
         cr.close();
         return res;
