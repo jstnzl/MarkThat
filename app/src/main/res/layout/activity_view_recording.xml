@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ViewRecording">
 
-    //
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar">
@@ -104,7 +103,7 @@
                 app:layout_constraintVertical_bias="0.515" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
