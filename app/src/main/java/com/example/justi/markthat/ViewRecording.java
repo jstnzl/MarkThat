@@ -29,6 +29,8 @@ public class ViewRecording extends AppCompatActivity {
     private MediaPlayer mp;
     private SeekBar seekBar;
     int position = 0;
+    int maxDuration = -1;
+    FloatingActionButton playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,19 @@ public class ViewRecording extends AppCompatActivity {
         try { mp.setDataSource(filePath); } catch (Exception e) {};
         try { mp.prepare(); } catch (Exception e) {};
         seekBar.setMax(mp.getDuration()*5);
+        maxDuration = mp.getDuration();
+
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playing = false;
+                playButton.setImageResource(R.drawable.play_icon);
+                position = 0;
+                mp.seekTo(position);
+                seekBar.setProgress(position);
+            }
+
+        });
 
         Button deleteButton = (Button)findViewById(R.id.delete_button);
         deleteButton.setOnClickListener( new View.OnClickListener() {
@@ -78,7 +93,7 @@ public class ViewRecording extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.playButton);
+        playButton = (FloatingActionButton) findViewById(R.id.playButton);
         playButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +101,7 @@ public class ViewRecording extends AppCompatActivity {
                     playing = false;
                     mp.pause();
                     position = mp.getCurrentPosition();
-                    playButton.setImageResource(R.drawable.stop_icon);
+                    playButton.setImageResource(R.drawable.play_icon);
                     Toast.makeText(getApplicationContext(), "Pausing", Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -94,7 +109,7 @@ public class ViewRecording extends AppCompatActivity {
                     mp.seekTo(position);
                     mp.start();
                     updateSeekBar();
-                    playButton.setImageResource(R.drawable.play_icon);
+                    playButton.setImageResource(R.drawable.stop_icon);
                     Toast.makeText(getApplicationContext(), "Playing", Toast.LENGTH_SHORT).show();
                 }
 
