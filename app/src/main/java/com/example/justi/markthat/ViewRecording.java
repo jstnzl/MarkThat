@@ -1,12 +1,18 @@
 package com.example.justi.markthat;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +26,9 @@ import java.time.format.DateTimeFormatter;
 public class ViewRecording extends AppCompatActivity {
     MyDB db;
     boolean playing = false;
+    private MediaPlayer mp;
+    private SeekBar seekBar;
+    int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +50,19 @@ public class ViewRecording extends AppCompatActivity {
         final String fileName = info[0];
 
         // Set textviews to info passed in by home
+        seekBar = (SeekBar) findViewById(R.id.SeekBar);
         TextView titleText=(TextView)findViewById(R.id.recording_title);
         TextView descText=(TextView)findViewById(R.id.recording_desc);
         TextView dateText=(TextView)findViewById(R.id.recording_date);
         titleText.setText(info[1]);
         descText.setText(info[2]);
         dateText.setText(getDateFromFile(fileName));
+
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/" + fileName;
+        mp = new MediaPlayer();
+        try { mp.setDataSource(filePath); } catch (Exception e) {};
+        try { mp.prepare(); } catch (Exception e) {};
+        seekBar.setMax(mp.getDuration()*5);
 
         Button deleteButton = (Button)findViewById(R.id.delete_button);
         deleteButton.setOnClickListener( new View.OnClickListener() {
@@ -68,15 +84,39 @@ public class ViewRecording extends AppCompatActivity {
             public void onClick(View v) {
                 if(playing) {
                     playing = false;
+                    mp.pause();
+                    position = mp.getCurrentPosition();
                     playButton.setImageResource(R.drawable.stop_icon);
                     Toast.makeText(getApplicationContext(), "Pausing", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     playing = true;
+                    mp.seekTo(position);
+                    mp.start();
+                    updateSeekBar();
                     playButton.setImageResource(R.drawable.play_icon);
                     Toast.makeText(getApplicationContext(), "Playing", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.i("Tranverse Change: ", Integer.toString(i));
+                position = i/5;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mp.pause();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mp.seekTo(position);
+                mp.start();
             }
         });
 
@@ -91,6 +131,8 @@ public class ViewRecording extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(mp != null)
+            mp.stop();
         refreshActivity();
         super.onBackPressed();
     }
@@ -100,5 +142,18 @@ public class ViewRecording extends AppCompatActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            updateSeekBar();
+        }
+    };
+
+    private void updateSeekBar() {
+        seekBar.setProgress(mp.getCurrentPosition()*5);
+//        txtCurrentTime.setText(milliSecondsToTimer(mp.getCurrentPosition()));
+        seekBar.postDelayed(runnable, 50);
     }
 }
