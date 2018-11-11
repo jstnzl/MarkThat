@@ -1,6 +1,7 @@
 package com.example.justi.markthat;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ViewRecording extends AppCompatActivity {
     MyDB db;
+    boolean playing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,25 @@ public class ViewRecording extends AppCompatActivity {
 
             }
         });
+
+        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.playButton);
+        playButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(playing) {
+                    playing = false;
+                    playButton.setImageResource(R.drawable.stop_icon);
+                    Toast.makeText(getApplicationContext(), "Pausing", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    playing = true;
+                    playButton.setImageResource(R.drawable.play_icon);
+                    Toast.makeText(getApplicationContext(), "Playing", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
     public String getDateFromFile(String file) {
