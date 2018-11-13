@@ -51,24 +51,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="272dp"
-            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recording_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-black"
-                android:paddingBottom="8dp"
                 android:paddingLeft="12dp"
-                android:paddingRight="12dp"
                 android:paddingTop="8dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="8dp"
                 android:text="Title"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -83,15 +79,15 @@
                 android:id="@+id/recording_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-black"
-                android:paddingBottom="8dp"
                 android:paddingLeft="12dp"
-                android:paddingRight="12dp"
                 android:paddingTop="10dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="8dp"
                 android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -102,42 +98,59 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.515" />
 
-            <Button
-                android:id="@+id/delete_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="10dp"
-                android:text="DELETE" />
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="10dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="8dp"
+            android:text="DELETE" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp">
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/playButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    app:backgroundTint="@color/colorAccent"
-                    app:srcCompat="@drawable/play_icon"
-                    android:layout_marginStart="25dp" />
-
-                <SeekBar
-                    android:id="@+id/SeekBar"
-                    android:layout_marginTop="12dp"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </LinearLayout>
 
     </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@drawable/play_icon"
+        tools:layout_editor_absoluteX="185dp"
+        tools:layout_editor_absoluteY="309dp" />
+
+    <SeekBar
+        android:id="@+id/SeekBar"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="263dp" />
+
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="Duration"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="259dp"
+        tools:layout_editor_absoluteY="320dp" />
+
+    <TextView
+        android:id="@+id/current_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CurrentTime"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="320dp" />
 
     <TextView
         android:id="@+id/recording_date"
@@ -184,6 +197,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.684" />
+
+    <View
+        android:id="@+id/hr1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="243dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
