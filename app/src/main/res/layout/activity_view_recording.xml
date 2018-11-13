@@ -42,34 +42,33 @@
         android:id="@+id/linearLayout"
         android:layout_width="421dp"
         android:layout_height="350dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
-        android:layout_marginEnd="8dp"
         android:background="@android:color/white"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="197dp"
+            android:layout_height="272dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recording_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-black"
-                android:paddingLeft="12dp"
-                android:paddingTop="8dp"
-                android:paddingRight="12dp"
                 android:paddingBottom="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="8dp"
                 android:text="Title"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -84,15 +83,15 @@
                 android:id="@+id/recording_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-black"
-                android:paddingLeft="12dp"
-                android:paddingTop="10dp"
-                android:paddingRight="12dp"
                 android:paddingBottom="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="10dp"
                 android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -107,25 +106,36 @@
                 android:id="@+id/delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
-                android:paddingLeft="12dp"
-                android:paddingTop="10dp"
-                android:paddingRight="12dp"
                 android:paddingBottom="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="10dp"
                 android:text="DELETE" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/playButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorAccent"
+                    app:srcCompat="@drawable/play_icon"
+                    android:layout_marginStart="25dp" />
+
+                <SeekBar
+                    android:id="@+id/SeekBar"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="WAVEFORM"
-            android:textSize="50sp" />
 
     </LinearLayout>
 
