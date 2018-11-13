@@ -31,6 +31,7 @@ public class ViewRecording extends AppCompatActivity {
     int position = 0;
     int maxDuration = -1;
     FloatingActionButton playButton;
+    TextView currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,9 @@ public class ViewRecording extends AppCompatActivity {
 
         // Set textviews to info passed in by home
         seekBar = (SeekBar) findViewById(R.id.SeekBar);
+        TextView durationText = (TextView)findViewById(R.id.duration);
+        currentTime = (TextView)findViewById(R.id.current_time);
+        currentTime.setText("00:00");
         TextView titleText=(TextView)findViewById(R.id.recording_title);
         TextView descText=(TextView)findViewById(R.id.recording_desc);
         TextView dateText=(TextView)findViewById(R.id.recording_date);
@@ -66,6 +70,7 @@ public class ViewRecording extends AppCompatActivity {
         try { mp.prepare(); } catch (Exception e) {};
         seekBar.setMax(mp.getDuration()*5);
         maxDuration = mp.getDuration();
+        durationText.setText(getFormattedDuration(maxDuration));
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -119,8 +124,8 @@ public class ViewRecording extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.i("Tranverse Change: ", Integer.toString(i));
                 position = i/5;
+                currentTime.setText(getFormattedDuration(position));
             }
 
             @Override
@@ -170,5 +175,15 @@ public class ViewRecording extends AppCompatActivity {
         seekBar.setProgress(mp.getCurrentPosition()*5);
 //        txtCurrentTime.setText(milliSecondsToTimer(mp.getCurrentPosition()));
         seekBar.postDelayed(runnable, 50);
+    }
+
+    private String getFormattedDuration(int duration) {
+        StringBuilder sb = new StringBuilder();
+        int minutes = (duration/1000)/60;
+        String s1 = minutes > 9 ? minutes+"" : "0"+minutes;
+        int seconds = (duration/1000)%60;
+        String s2 = seconds > 9 ? seconds+"" : "0"+seconds;
+        sb.append(s1+":"+s2);
+        return sb.toString();
     }
 }

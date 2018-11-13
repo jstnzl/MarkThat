@@ -122,17 +122,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="70dp"
         android:layout_marginEnd="186dp"
-        android:layout_marginBottom="57dp"
         android:clickable="true"
         app:backgroundTint="#A1D417"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/app_bar"
-        app:layout_constraintTop_toTopOf="@+id/SeekBar"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/SeekBar"
+        app:layout_constraintVertical_bias="0.05"
         app:srcCompat="@drawable/play_icon" />
 
     <SeekBar
@@ -143,43 +141,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/app_bar"
-        app:layout_constraintVertical_bias="0.404" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.3" />
 
 
     <TextView
-        android:id="@+id/duration"
+        android:id="@+id/current_time"
         android:layout_width="76dp"
         android:layout_height="28dp"
         android:layout_marginStart="500dp"
-        android:layout_marginTop="320dp"
         android:layout_marginEnd="600dp"
-        android:layout_marginBottom="8dp"
-        android:text="Duration"
+        android:text="CurrentTime"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/SeekBar"
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
-        android:id="@+id/current_time"
+        android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="320dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="316dp"
-        android:text="CurrentTime"
+        android:layout_marginEnd="100dp"
+        android:text="Duration"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.969"
-        app:layout_constraintStart_toEndOf="@+id/duration"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/current_time"
+        app:layout_constraintTop_toBottomOf="@+id/SeekBar"
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/recording_date"
@@ -205,7 +198,7 @@
         app:layout_constraintVertical_bias="0.093" />
 
     <TextView
-        android:id="@+id/recent_recordings_title"
+        android:id="@+id/marks_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
