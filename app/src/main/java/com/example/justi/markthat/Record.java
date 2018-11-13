@@ -75,7 +75,7 @@ public class Record extends AppCompatActivity {
             switch (v.getId() /*to get clicked view id**/) {
                 case R.id.toggleRecordButton:
                     if(recording){
-                        stopRecording();
+                        stopRecording(false);
                         recording = false;
                     }
                     else {
@@ -115,22 +115,24 @@ public class Record extends AppCompatActivity {
         }
     }
 
-    private void stopRecording() {
-        Toast.makeText(getApplicationContext(), "Stopping recording", Toast.LENGTH_SHORT).show();
+    private void stopRecording(boolean isBack) {
         if(recorder != null) {
+            if(!isBack)
+                Toast.makeText(getApplicationContext(), "Stopping recording", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getApplicationContext(), "Recording cancelled", Toast.LENGTH_SHORT).show();
             try {
                 recorder.stop();
                 recorder.reset();
                 recorder.release();
                 recorder = null;
-                db.insertRecord(fileName, title.getText().toString(), description.getText().toString());
+                if(!isBack)
+                    db.insertRecord(fileName, title.getText().toString(), description.getText().toString());
             }
             catch(RuntimeException e) {
                 Log.w("Error stopping recording", e.toString());
             }
         }
-        else
-            Toast.makeText(getApplicationContext(), "No recording found!", Toast.LENGTH_SHORT).show();
     }
 
     private String getFilename() {
@@ -172,6 +174,7 @@ public class Record extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        stopRecording(true);
         refreshActivity();
         super.onBackPressed();
     }
