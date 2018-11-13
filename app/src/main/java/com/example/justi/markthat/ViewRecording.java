@@ -130,13 +130,15 @@ public class ViewRecording extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                mp.pause();
+                if(playing)
+                    mp.pause();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mp.seekTo(position);
-                mp.start();
+                if(playing)
+                    mp.start();
             }
         });
 
