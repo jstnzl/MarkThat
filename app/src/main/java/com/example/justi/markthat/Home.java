@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
@@ -65,6 +66,8 @@ public class Home extends AppCompatActivity {
                 idx++;
             }
         }
+        else
+            Toast.makeText(getApplicationContext(), "You have no recordings yet!", Toast.LENGTH_SHORT).show();
         SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.home_list_row,
                 new String[] {"Title", "Description", "Date Recorded"},
                 new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDate });
