@@ -38,7 +38,7 @@ public class ViewRecording extends AppCompatActivity {
     boolean playing = false;
     private MediaPlayer mp;
     private SeekBar seekBar;
-    int position = 0;
+    int timeStamp = 0;
     int maxDuration = -1;
     FloatingActionButton playButton;
     TextView currentTime;
@@ -116,26 +116,30 @@ public class ViewRecording extends AppCompatActivity {
                 new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDuration, R.id.rowPosition });
         myListView.setAdapter(adapter);
 
-//        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                    long id) {
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                int time = Integer.parseInt(dbResults.get(position).get(4));
+                timeStamp = time;
+                mp.seekTo(time);
+                seekBar.setProgress(time*5);
+            }
+        });
 //                Intent intent = new Intent(view.getContext(), ViewRecording.class);
 //                String[] info = new String[dbResults.get(position).size()];
 //                info = dbResults.get(position).toArray(info);
 //                intent.putExtra("RECORDING_INFO", info);
 //                startActivity(intent);
-//            }
-//        });
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 playing = false;
                 playButton.setImageResource(R.drawable.play_icon);
-                position = 0;
-                mp.seekTo(position);
-                seekBar.setProgress(position);
+                timeStamp = 0;
+                mp.seekTo(timeStamp);
+                seekBar.setProgress(timeStamp);
             }
 
         });
@@ -179,13 +183,13 @@ public class ViewRecording extends AppCompatActivity {
                 if(playing) {
                     playing = false;
                     mp.pause();
-                    position = mp.getCurrentPosition();
+                    timeStamp = mp.getCurrentPosition();
                     playButton.setImageResource(R.drawable.play_icon);
                     Toast.makeText(getApplicationContext(), "Pausing", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     playing = true;
-                    mp.seekTo(position);
+                    mp.seekTo(timeStamp);
                     mp.start();
                     updateSeekBar();
                     playButton.setImageResource(R.drawable.stop_icon);
@@ -198,10 +202,10 @@ public class ViewRecording extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                position = i/5;
-                currentTime.setText(getFormattedDuration(position));
+                timeStamp = i/5;
+                currentTime.setText(getFormattedDuration(timeStamp));
                 if(!playing)
-                    mp.seekTo(position);
+                    mp.seekTo(timeStamp);
             }
 
             @Override
@@ -212,7 +216,7 @@ public class ViewRecording extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mp.seekTo(position);
+                mp.seekTo(timeStamp);
                 if(playing)
                     mp.start();
             }
