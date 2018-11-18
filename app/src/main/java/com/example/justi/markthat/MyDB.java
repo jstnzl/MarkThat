@@ -41,7 +41,7 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table recordTable(fileName String primary key, title String, description String, folder String);");
-        db.execSQL("create table markTable(file String primary key, title String, description String, duration String, " +
+        db.execSQL("create table markTable(file String, title String, description String, duration long, position long, " +
                     "foreign key(file) references recordTable(fileName) on delete cascade);");
     }
 
@@ -68,7 +68,7 @@ public class MyDB extends SQLiteOpenHelper {
         db.insert("recordTable", null, cv);
     }
 
-    public void insertMark(String fileName, String title, String description){
+    public void insertMark(String fileName, String title, String description, long position){
         if(title.matches(""))
             title = "Mark-"+(countMarks(fileName)+1);
         if(description.matches(""))
@@ -78,6 +78,8 @@ public class MyDB extends SQLiteOpenHelper {
         cv.put("file", fileName);
         cv.put("title", title);
         cv.put("description", description);
+        cv.put("duration", 0);
+        cv.put("position", position);
         db.insert("markTable", null, cv);
     }
 
