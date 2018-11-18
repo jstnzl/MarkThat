@@ -42,7 +42,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="421dp"
-        android:layout_height="350dp"
+        android:layout_height="280dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
@@ -147,30 +147,29 @@
 
     <TextView
         android:id="@+id/current_time"
-        android:layout_width="76dp"
+        android:layout_width="wrap_content"
         android:layout_height="28dp"
-        android:layout_marginStart="500dp"
-        android:layout_marginEnd="600dp"
         android:text="CurrentTime"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SeekBar"
         app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginEnd="100dp"
+        android:layout_height="28dp"
         android:text="Duration"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.969"
-        app:layout_constraintStart_toEndOf="@+id/current_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toEndOf="@+id/playButton"
         app:layout_constraintTop_toBottomOf="@+id/SeekBar"
         app:layout_constraintVertical_bias="0" />
 
@@ -197,28 +196,57 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.093" />
 
-    <TextView
-        android:id="@+id/marks_title"
-        android:layout_width="wrap_content"
+    <!--Second half-->
+    <LinearLayout
+        android:id="@+id/markLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="sans-serif-black"
-        android:paddingLeft="12dp"
-        android:paddingTop="8dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="12dp"
-        android:text="Marks"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:layout_weight="1.0"
+        android:background="@android:color/white"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.684" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.5">
+
+        <TextView
+            android:id="@+id/marks_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-black"
+            android:paddingLeft="12dp"
+            android:paddingTop="8dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="12dp"
+            android:text="Marks"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.025"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.684" />
+
+        <ListView
+            android:id="@+id/recording_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="305dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.444"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+    </LinearLayout>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

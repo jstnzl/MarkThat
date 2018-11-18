@@ -89,7 +89,7 @@ public class MyDB extends SQLiteOpenHelper {
         Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
             ArrayList<String> temp = new ArrayList<>();
-            // file, title, desc, folder
+            // file, title, desc, duration, position
             temp.add(cr.getString(0));
             temp.add(cr.getString(1));
             temp.add(cr.getString(2));
@@ -100,14 +100,20 @@ public class MyDB extends SQLiteOpenHelper {
         return res;
     }
 
-    public ArrayList<String> getMarksForRecord(String fileName){
+    public List<List<String>> getMarksForRecord(String fileName){
         String[] params = new String[]{fileName};
-        ArrayList<String> res = new ArrayList<>();
+        List<List<String>> res = new ArrayList<>();
         db = getReadableDatabase();
         Cursor cr = db.rawQuery("select * from markTable where file= ?;", params);
         while(cr.moveToNext()){
             // file, title, desc, folder
-            res.add(cr.getString(0) + "," + cr.getString(1)+"&"+cr.getString(2)+"+"+cr.getString(3));
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add(cr.getString(0));
+            temp.add(cr.getString(1));
+            temp.add(cr.getString(2));
+            temp.add(cr.getString(3));
+            temp.add(cr.getString(4));
+            res.add(temp);
         }
         cr.close();
         return res;

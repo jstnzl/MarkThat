@@ -1,5 +1,6 @@
 package com.example.justi.markthat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -7,13 +8,17 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ViewRecording extends AppCompatActivity {
     MyDB db;
@@ -33,6 +42,10 @@ public class ViewRecording extends AppCompatActivity {
     int maxDuration = -1;
     FloatingActionButton playButton;
     TextView currentTime;
+    List<List<String>> dbResults;
+    ListView myListView;
+    List<Map<String, String>> data = new ArrayList<>();
+    long start = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +63,7 @@ public class ViewRecording extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Set Title for toolbar
         getSupportActionBar().setTitle("View Recording");
+
         Bundle extras = getIntent().getExtras();
         // file, title, desc, folder
         String[] info = new String[4];
@@ -63,7 +77,7 @@ public class ViewRecording extends AppCompatActivity {
         seekBar = (SeekBar) findViewById(R.id.SeekBar);
         TextView durationText = (TextView)findViewById(R.id.duration);
         currentTime = (TextView)findViewById(R.id.current_time);
-        currentTime.setText("00:00");
+        currentTime.setText("00:00.000");
         TextView titleText=(TextView)findViewById(R.id.recording_title);
         TextView descText=(TextView)findViewById(R.id.recording_desc);
         TextView dateText=(TextView)findViewById(R.id.recording_date);
@@ -78,6 +92,41 @@ public class ViewRecording extends AppCompatActivity {
         seekBar.setMax(mp.getDuration()*5);
         maxDuration = mp.getDuration();
         durationText.setText(getFormattedDuration(maxDuration));
+
+        dbResults = db.getMarksForRecord(fileName);
+        myListView = (ListView)findViewById(R.id.recording_listview);
+        if (dbResults.size() > 0) {
+            int idx = 0;
+            while (idx < dbResults.size()) {
+                Map<String, String> datum = new HashMap<>();
+                List<String> row = dbResults.get(idx);
+                // file, title, desc, duration, position
+                start = Long.parseLong(row.get(0).substring(0, row.get(0).length()-4));
+                String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
+                datum.put("Title", row.get(1));
+                datum.put("Description", row.get(2));
+                datum.put("Duration", row.get(3));
+                datum.put("Position", pos);
+                data.add(datum);
+                idx++;
+            }
+        }
+        SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.view_recording_list_row,
+                new String[] {"Title", "Description", "Duration", "Position"},
+                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDuration, R.id.rowPosition });
+        myListView.setAdapter(adapter);
+
+//        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position,
+//                                    long id) {
+//                Intent intent = new Intent(view.getContext(), ViewRecording.class);
+//                String[] info = new String[dbResults.get(position).size()];
+//                info = dbResults.get(position).toArray(info);
+//                intent.putExtra("RECORDING_INFO", info);
+//                startActivity(intent);
+//            }
+//        });
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -95,13 +144,31 @@ public class ViewRecording extends AppCompatActivity {
         deleteButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(db.delete(fileName)) {
-                    Toast.makeText(getApplicationContext(), "Recording deleted", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "Error: Please try again later", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setCancelable(true);
+                builder.setTitle("Delete this recording?");
+                builder.setMessage("This action cannot be undone");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(db.delete(fileName)) {
+                                    Toast.makeText(getApplicationContext(), "Recording deleted", Toast.LENGTH_SHORT).show();
+                                    onBackPressed();
+                                }
+                                else
+                                    Toast.makeText(getApplicationContext(), "Error: Please try again later", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -194,7 +261,8 @@ public class ViewRecording extends AppCompatActivity {
         String s1 = minutes > 9 ? minutes+"" : "0"+minutes;
         int seconds = (duration/1000)%60;
         String s2 = seconds > 9 ? seconds+"" : "0"+seconds;
-        sb.append(s1+":"+s2);
+        String s3 = duration - minutes*1000 - seconds*1000 +"";
+        sb.append(s1+":"+s2+"."+s3);
         return sb.toString();
     }
 }
