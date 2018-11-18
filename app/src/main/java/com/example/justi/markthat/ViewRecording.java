@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,6 +50,14 @@ public class ViewRecording extends AppCompatActivity {
         db = new MyDB(this, null, 1);
         Stetho.initializeWithDefaults(this);
 
+        //toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        //Set Title for toolbar
+        getSupportActionBar().setTitle("View Recording");
         dbResults = db.getAllMarks();
         myListView = (ListView)findViewById(R.id.recording_listview);
         if (dbResults.size() > 0) {
@@ -166,6 +175,8 @@ public class ViewRecording extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 position = i/5;
                 currentTime.setText(getFormattedDuration(position));
+                if(!playing)
+                    mp.seekTo(position);
             }
 
             @Override

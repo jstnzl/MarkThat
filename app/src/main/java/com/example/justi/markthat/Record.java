@@ -43,6 +43,7 @@ public class Record extends AppCompatActivity {
     EditText title;
     EditText description;
     String fileName;
+    long startTime;
 
     String[] permissions = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -65,7 +66,9 @@ public class Record extends AppCompatActivity {
         Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
+        final FloatingActionButton markButton = (FloatingActionButton) findViewById(R.id.markButton);
         recordButton.setOnClickListener(buttonListeners);
+        markButton.setOnClickListener(buttonListeners);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
     }
@@ -90,13 +93,21 @@ public class Record extends AppCompatActivity {
                     }
                     break;
                 case R.id.markButton:
-
+                    if(!recording)
+                        Toast.makeText(getApplicationContext(), "Please try while recording", Toast.LENGTH_SHORT).show();
+                    else
+                        markIt();
                     break;
                 default:
                     break;
             }
         }
     };
+
+    private void markIt() {
+        db.insertMark(startTime+".mp4", "", "", System.currentTimeMillis()-startTime);
+        Toast.makeText(getApplicationContext(), "Marked!", Toast.LENGTH_SHORT).show();
+    }
 
     private void startRecording() {
         recorder = new MediaRecorder();
@@ -137,6 +148,7 @@ public class Record extends AppCompatActivity {
 
     private String getFilename() {
         String name = System.currentTimeMillis() + ".mp4";
+        startTime = Long.parseLong(name.substring(0, name.length() - 4));
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/";
         try {
             File dir = new File(rootPath);
