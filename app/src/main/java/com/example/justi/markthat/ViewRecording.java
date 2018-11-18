@@ -1,5 +1,6 @@
 package com.example.justi.markthat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -142,13 +144,31 @@ public class ViewRecording extends AppCompatActivity {
         deleteButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(db.delete(fileName)) {
-                    Toast.makeText(getApplicationContext(), "Recording deleted", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "Error: Please try again later", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setCancelable(true);
+                builder.setTitle("Delete this recording?");
+                builder.setMessage("This action cannot be undone");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(db.delete(fileName)) {
+                                    Toast.makeText(getApplicationContext(), "Recording deleted", Toast.LENGTH_SHORT).show();
+                                    onBackPressed();
+                                }
+                                else
+                                    Toast.makeText(getApplicationContext(), "Error: Please try again later", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
