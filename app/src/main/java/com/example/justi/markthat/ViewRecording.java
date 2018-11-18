@@ -75,7 +75,7 @@ public class ViewRecording extends AppCompatActivity {
         seekBar = (SeekBar) findViewById(R.id.SeekBar);
         TextView durationText = (TextView)findViewById(R.id.duration);
         currentTime = (TextView)findViewById(R.id.current_time);
-        currentTime.setText("00:00");
+        currentTime.setText("00:00.000");
         TextView titleText=(TextView)findViewById(R.id.recording_title);
         TextView descText=(TextView)findViewById(R.id.recording_desc);
         TextView dateText=(TextView)findViewById(R.id.recording_date);
@@ -100,10 +100,11 @@ public class ViewRecording extends AppCompatActivity {
                 List<String> row = dbResults.get(idx);
                 // file, title, desc, duration, position
                 start = Long.parseLong(row.get(0).substring(0, row.get(0).length()-4));
+                String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
                 datum.put("Title", row.get(1));
                 datum.put("Description", row.get(2));
                 datum.put("Duration", row.get(3));
-                datum.put("Position", row.get(4));
+                datum.put("Position", pos);
                 data.add(datum);
                 idx++;
             }
@@ -240,7 +241,8 @@ public class ViewRecording extends AppCompatActivity {
         String s1 = minutes > 9 ? minutes+"" : "0"+minutes;
         int seconds = (duration/1000)%60;
         String s2 = seconds > 9 ? seconds+"" : "0"+seconds;
-        sb.append(s1+":"+s2);
+        String s3 = duration - minutes*1000 - seconds*1000 +"";
+        sb.append(s1+":"+s2+"."+s3);
         return sb.toString();
     }
 }

@@ -112,6 +112,7 @@ public class MyDB extends SQLiteOpenHelper {
             temp.add(cr.getString(1));
             temp.add(cr.getString(2));
             temp.add(cr.getString(3));
+            temp.add(cr.getString(4));
             res.add(temp);
         }
         cr.close();
