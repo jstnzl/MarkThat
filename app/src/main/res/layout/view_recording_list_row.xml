@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/rowTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Title"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/rowDesc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:text="Description"
+        android:layout_below="@+id/rowTitle"/>
+
+    <TextView
+        android:id="@+id/rowDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="13sp"
+        android:text="Duration"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/rowPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:text="Position"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/rowDuration"/>
+
+</RelativeLayout>

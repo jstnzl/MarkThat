@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,8 @@ public class ViewRecording extends AppCompatActivity {
     TextView currentTime;
     List<List<String>> dbResults;
     ListView myListView;
+    List<Map<String, String>> data = new ArrayList<>();
+    long start = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,40 +61,7 @@ public class ViewRecording extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Set Title for toolbar
         getSupportActionBar().setTitle("View Recording");
-        dbResults = db.getAllMarks();
-        myListView = (ListView)findViewById(R.id.recording_listview);
-        if (dbResults.size() > 0) {
-            int idx = 0;
-            while (idx < dbResults.size()) {
-                Map<String, String> datum = new HashMap<>();
-                List<String> row = dbResults.get(idx);
-                String dateTime = getDateFromFile(row.get(0));
-                datum.put("Title", row.get(1));
-                datum.put("Description", row.get(2));
-                datum.put("Date Recorded", dateTime);
-                data.add(datum);
-                idx++;
-            }
-        }
-        SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.home_list_row,
-                new String[] {"Title", "Description", "Date Recorded"},
-                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDate });
-        myListView.setAdapter(adapter);
 
-        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Intent intent = new Intent(view.getContext(), ViewRecording.class);
-                String[] info = new String[dbResults.get(position).size()];
-                info = dbResults.get(position).toArray(info);
-                intent.putExtra("RECORDING_INFO", info);
-                startActivity(intent);
-            }
-        });
-
-        //title
-        setTitle("MarkThat - View Recording(s)");
         Bundle extras = getIntent().getExtras();
         // file, title, desc, folder
         String[] info = new String[4];
@@ -120,6 +90,40 @@ public class ViewRecording extends AppCompatActivity {
         seekBar.setMax(mp.getDuration()*5);
         maxDuration = mp.getDuration();
         durationText.setText(getFormattedDuration(maxDuration));
+
+        dbResults = db.getMarksForRecord(fileName);
+        myListView = (ListView)findViewById(R.id.recording_listview);
+        if (dbResults.size() > 0) {
+            int idx = 0;
+            while (idx < dbResults.size()) {
+                Map<String, String> datum = new HashMap<>();
+                List<String> row = dbResults.get(idx);
+                // file, title, desc, duration, position
+                start = Long.parseLong(row.get(0).substring(0, row.get(0).length()-4));
+                datum.put("Title", row.get(1));
+                datum.put("Description", row.get(2));
+                datum.put("Duration", row.get(3));
+                datum.put("Position", row.get(4));
+                data.add(datum);
+                idx++;
+            }
+        }
+        SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.view_recording_list_row,
+                new String[] {"Title", "Description", "Duration", "Position"},
+                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDuration, R.id.rowPosition });
+        myListView.setAdapter(adapter);
+
+//        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position,
+//                                    long id) {
+//                Intent intent = new Intent(view.getContext(), ViewRecording.class);
+//                String[] info = new String[dbResults.get(position).size()];
+//                info = dbResults.get(position).toArray(info);
+//                intent.putExtra("RECORDING_INFO", info);
+//                startActivity(intent);
+//            }
+//        });
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
