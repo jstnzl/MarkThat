@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class Home extends AppCompatActivity {
     ListView myListView;
     List<Map<String, String>> data = new ArrayList<>();
     List<List<String>> dbResults;
+    SearchView searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,10 @@ public class Home extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Set Title for toolbar
         getSupportActionBar().setTitle("Home");
+
+        searchBar = findViewById(R.id.search_recording_button);
+        searchBar.setQueryHint("Search by title or description!");
+
 
         db = new MyDB(this, null, 1);
         dbResults = db.getAllRecords();
