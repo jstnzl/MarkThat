@@ -64,7 +64,7 @@ public class Home extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        }
+        });
 
         db = new MyDB(this, null, 1);
         dbResults = db.getAllRecords();
