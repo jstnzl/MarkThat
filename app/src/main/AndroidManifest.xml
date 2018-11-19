@@ -23,6 +23,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".ViewRecording"></activity>
+        <activity android:name=".EditMark"></activity>
     </application>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

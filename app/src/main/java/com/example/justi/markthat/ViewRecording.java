@@ -40,10 +40,12 @@ public class ViewRecording extends AppCompatActivity {
     private SeekBar seekBar;
     int timeStamp = 0;
     int maxDuration = -1;
+    String fileCol;
     FloatingActionButton playButton;
     TextView currentTime;
     List<List<String>> dbResults;
     ListView myListView;
+    SimpleAdapter adapter;
     List<Map<String, String>> data = new ArrayList<>();
     long start = 0;
 
@@ -72,6 +74,7 @@ public class ViewRecording extends AppCompatActivity {
                 info = extras.getStringArray("RECORDING_INFO");
         }
         final String fileName = info[0];
+        fileCol = fileName;
 
         // Set textviews to info passed in by home
         seekBar = (SeekBar) findViewById(R.id.SeekBar);
@@ -92,29 +95,27 @@ public class ViewRecording extends AppCompatActivity {
         seekBar.setMax(mp.getDuration()*5);
         maxDuration = mp.getDuration();
         durationText.setText(getFormattedDuration(maxDuration));
-
-        dbResults = db.getMarksForRecord(fileName);
         myListView = (ListView)findViewById(R.id.recording_listview);
-        if (dbResults.size() > 0) {
-            int idx = 0;
-            while (idx < dbResults.size()) {
-                Map<String, String> datum = new HashMap<>();
-                List<String> row = dbResults.get(idx);
-                // file, title, desc, duration, position
-                start = Long.parseLong(row.get(0).substring(0, row.get(0).length()-4));
-                String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
-                datum.put("Title", row.get(1));
-                datum.put("Description", row.get(2));
-                datum.put("Duration", row.get(3));
-                datum.put("Position", pos);
-                data.add(datum);
-                idx++;
-            }
-        }
-        SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.view_recording_list_row,
-                new String[] {"Title", "Description", "Duration", "Position"},
-                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDuration, R.id.rowPosition });
+
+        getData();
+        adapter = new SimpleAdapter(this, data, R.layout.view_recording_list_row,
+                new String[] {"Title", "Description", "Position"},
+                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowPosition });
         myListView.setAdapter(adapter);
+        myListView.setLongClickable(true);
+
+        myListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                Intent intent = new Intent(view.getContext(), EditMark.class);
+                String[] info = new String[dbResults.get(position).size()];
+                info = dbResults.get(position).toArray(info);
+                intent.putExtra("MARK_INFO", info);
+                startActivityForResult(intent, 1);
+                return true;
+            }
+        });
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -156,7 +157,7 @@ public class ViewRecording extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(db.delete(fileName)) {
+                                if(db.deleteRecord(fileName)) {
                                     Toast.makeText(getApplicationContext(), "Recording deleted", Toast.LENGTH_SHORT).show();
                                     onBackPressed();
                                 }
@@ -268,5 +269,36 @@ public class ViewRecording extends AppCompatActivity {
         String s3 = duration - minutes*1000 - seconds*1000 +"";
         sb.append(s1+":"+s2+"."+s3);
         return sb.toString();
+    }
+
+    private void getData() {
+        data.clear();
+        dbResults = db.getMarksForRecord(fileCol);
+        if (dbResults.size() > 0) {
+            int idx = 0;
+            while (idx < dbResults.size()) {
+                Map<String, String> datum = new HashMap<>();
+                List<String> row = dbResults.get(idx);
+                // file, title, desc, duration, position
+                start = Long.parseLong(row.get(0).substring(0, row.get(0).length()-4));
+                String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
+                datum.put("Title", row.get(1));
+                datum.put("Description", row.get(2));
+//                datum.put("Duration", row.get(3));
+                datum.put("Position", pos);
+                data.add(datum);
+                idx++;
+            }
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                getData();
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 }
