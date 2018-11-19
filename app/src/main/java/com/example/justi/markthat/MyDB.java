@@ -119,6 +119,24 @@ public class MyDB extends SQLiteOpenHelper {
         return res;
     }
 
+    public List<List<String>> searchRecords(String query){
+        String[] params = new String[]{query, query};
+        List<List<String>> res = new ArrayList<>();
+        db = getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from recordTable where title= ? or desciption= ?;", params );
+        while(cr.moveToNext()){
+            ArrayList<String> temp = new ArrayList<>();
+            // file, title, desc, folder
+            temp.add(cr.getString(0));
+            temp.add(cr.getString(1));
+            temp.add(cr.getString(2));
+            temp.add(cr.getString(3));
+            res.add(temp);
+        }
+        cr.close();
+        return res;
+    }
+
     public int countMarks(String fileName) {
         String[] params = new String[]{fileName};
         db = getReadableDatabase();

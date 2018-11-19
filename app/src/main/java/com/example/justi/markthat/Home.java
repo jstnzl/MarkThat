@@ -54,7 +54,17 @@ public class Home extends AppCompatActivity {
 
         searchBar = findViewById(R.id.search_recording_button);
         searchBar.setQueryHint("Search by title or description!");
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        }
 
         db = new MyDB(this, null, 1);
         dbResults = db.getAllRecords();
