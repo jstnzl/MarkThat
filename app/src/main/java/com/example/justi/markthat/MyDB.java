@@ -89,7 +89,7 @@ public class MyDB extends SQLiteOpenHelper {
         Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
             ArrayList<String> temp = new ArrayList<>();
-            // file, title, desc, duration, position
+            // file, title, desc, folder
             temp.add(cr.getString(0));
             temp.add(cr.getString(1));
             temp.add(cr.getString(2));
@@ -106,7 +106,7 @@ public class MyDB extends SQLiteOpenHelper {
         db = getReadableDatabase();
         Cursor cr = db.rawQuery("select * from markTable where file= ?;", params);
         while(cr.moveToNext()){
-            // file, title, desc, folder
+            // file, title, desc, duration, position
             ArrayList<String> temp = new ArrayList<>();
             temp.add(cr.getString(0));
             temp.add(cr.getString(1));
@@ -143,18 +143,25 @@ public class MyDB extends SQLiteOpenHelper {
         db.update("recordTable", cv,  "fileName = ?", new String[]{file});
     }
 
-    public void updateMark(String file, String s1, String s2){
+    public void updateMark(String file, String pos, String s1, String s2){
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("title", s1);
         cv.put("description", s2);
-        db.update("recordTable", cv,  "fileName = ?", new String[]{file});
+        db.update("markTable", cv,  "file = ? AND position=?", new String[]{file, pos});
     }
 
-    public boolean delete(String s){
+    public boolean deleteRecord(String s){
         db = getWritableDatabase();
         int deletedRows = 0;
         deletedRows += db.delete("recordTable", "fileName= ?", new String[]{s});
+        return deletedRows > 0;
+    }
+
+    public boolean deleteMark(String s, String s1){
+        db = getWritableDatabase();
+        int deletedRows = 0;
+        deletedRows += db.delete("markTable", "file= ? AND position=?", new String[]{s, s1});
         return deletedRows > 0;
     }
 
