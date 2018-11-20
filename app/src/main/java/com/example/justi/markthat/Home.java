@@ -49,7 +49,7 @@ public class Home extends AppCompatActivity {
     List<Map<String, String>> data = new ArrayList<>();
     List<List<String>> dbResults;
     Button addFolder;
-    String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/";
+    List<CardView> cards = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +125,11 @@ public class Home extends AppCompatActivity {
             }
         });
         createFolderFile(cardLayout);
+        for(CardView card : cards) {
+//            card.setOnClickListener(new View.OnClickListener(){
+//
+//            });
+        }
     }
 
     @Override
@@ -165,8 +170,8 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    private CardView createCard(LinearLayout addFolder) {
-        CardView card = new CardView(addFolder.getContext());
+    private CardView createCard(LinearLayout cardLayout) {
+        CardView card = new CardView(cardLayout.getContext());
         LayoutParams params = new LayoutParams(
                 300,
                 LayoutParams.MATCH_PARENT
@@ -182,13 +187,16 @@ public class Home extends AppCompatActivity {
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT
         );
-        TextView tv = new TextView(addFolder.getContext());
+        TextView tv = new TextView(cardLayout.getContext());
         tv.setLayoutParams(params1);
         tv.setText("No Name");
         tv.setTextColor(Color.WHITE);
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(16);
         card.addView(tv);
+        cards.add(card);
+        tv.setId(cards.size()*-1);
+        card.setId(cards.size());
         return card;
     }
 }
