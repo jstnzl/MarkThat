@@ -2,18 +2,32 @@ package com.example.justi.markthat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -26,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Date;
+import android.widget.LinearLayout.LayoutParams;
 
 public class Home extends AppCompatActivity {
     MyDB db;
@@ -33,13 +48,15 @@ public class Home extends AppCompatActivity {
     ListView myListView;
     List<Map<String, String>> data = new ArrayList<>();
     List<List<String>> dbResults;
+    Button addFolder;
+    String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         db = new MyDB(this, null, 1);
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
 
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -84,6 +101,30 @@ public class Home extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        final LinearLayout cardLayout = (LinearLayout) findViewById(R.id.cardLayout);
+        addFolder = findViewById(R.id.addFolder_btn);
+        addFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CardView card = createCard(cardLayout);
+                try {
+                    // open myfilename.txt for writing
+                    OutputStreamWriter out=new OutputStreamWriter(openFileOutput("folders.txt",MODE_APPEND));
+                    // write the contents to the file
+                    out.write("No name");
+                    out.write('\n');
+                    // close the file
+                    out.close();
+                    Toast.makeText(Home.this,"Folder Added!",Toast.LENGTH_LONG).show();
+                    cardLayout.addView(card);
+                }
+                catch (java.io.IOException e) {
+                    Toast.makeText(Home.this,"Sorry folder could't be added",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        createFolderFile(cardLayout);
     }
 
     @Override
@@ -101,5 +142,53 @@ public class Home extends AppCompatActivity {
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeMillis), ZoneId.systemDefault());
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         return dateTime.format(dateFormat);
+    }
+
+    private void createFolderFile(LinearLayout cardLayout) {
+        try {
+            // open the file for reading
+            InputStream inStream = openFileInput("folders.txt");
+            // if file the available for reading
+            if (inStream != null) {
+                // prepare the file for reading
+                InputStreamReader inputReader = new InputStreamReader(inStream);
+                BufferedReader buffReader = new BufferedReader(inputReader);
+                String line;
+                while ((line = buffReader.readLine()) != null) {
+                    CardView card = createCard(cardLayout);
+                    cardLayout.addView(card);
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private CardView createCard(LinearLayout addFolder) {
+        CardView card = new CardView(addFolder.getContext());
+        LayoutParams params = new LayoutParams(
+                300,
+                LayoutParams.MATCH_PARENT
+        );
+        params.setMarginStart(20);
+        card.setLayoutParams(params);
+        card.setCardBackgroundColor(R.drawable.gradients);
+        card.setCardElevation(2);
+        card.setRadius(4);
+        card.setContentPadding(15, 15, 15, 15);
+
+        LayoutParams params1 = new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT
+        );
+        TextView tv = new TextView(addFolder.getContext());
+        tv.setLayoutParams(params1);
+        tv.setText("No Name");
+        tv.setTextColor(Color.WHITE);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(16);
+        card.addView(tv);
+        return card;
     }
 }
