@@ -159,6 +159,18 @@ public class ViewRecording extends AppCompatActivity {
             }
         });
 
+        Button markButton = (Button)findViewById(R.id.mark_button);
+        markButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long position = timeStamp;
+                db.insertMark(fileName, "", "", position);
+                getData();
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Marked!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
             Button deleteButton = (Button)findViewById(R.id.delete_button);
         deleteButton.setOnClickListener( new View.OnClickListener() {
