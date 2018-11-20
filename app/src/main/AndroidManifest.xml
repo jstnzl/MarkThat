@@ -22,7 +22,9 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".ViewRecording"></activity>
+        <activity android:name=".ViewRecording"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".EditMark"></activity>
         <activity android:name=".EditRecording"></activity>
     </application>

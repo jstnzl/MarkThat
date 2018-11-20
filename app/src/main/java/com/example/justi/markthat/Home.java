@@ -35,13 +35,14 @@ public class Home extends AppCompatActivity {
     List<Map<String, String>> data = new ArrayList<>();
     List<List<String>> dbResults;
     SearchView searchBar;
+    SimpleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         db = new MyDB(this, null, 1);
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
 
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -51,20 +52,6 @@ public class Home extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Set Title for toolbar
         getSupportActionBar().setTitle("Home");
-
-        searchBar = findViewById(R.id.search_recording_button);
-        searchBar.setQueryHint("Search by title or description!");
-        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
 
         db = new MyDB(this, null, 1);
         dbResults = db.getAllRecords();
@@ -84,7 +71,7 @@ public class Home extends AppCompatActivity {
         }
         else
             Toast.makeText(getApplicationContext(), "You have no recordings yet!", Toast.LENGTH_SHORT).show();
-        SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.home_list_row,
+        adapter = new SimpleAdapter(this, data, R.layout.home_list_row,
                 new String[] {"Title", "Description", "Date Recorded"},
                 new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDate });
         myListView.setAdapter(adapter);
@@ -98,6 +85,39 @@ public class Home extends AppCompatActivity {
                 info = dbResults.get(position).toArray(info);
                 intent.putExtra("RECORDING_INFO", info);
                 startActivity(intent);
+            }
+        });
+
+        searchBar = findViewById(R.id.search_recording_button);
+        searchBar.setQueryHint("Filter by title or text");
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (dbResults.size() > 0) {
+                    int idx = 0;
+                    data.clear();
+                    while (idx < dbResults.size()) {
+                        Map<String, String> datum = new HashMap<>();
+                        List<String> row = dbResults.get(idx);
+                        String lowerTitle = row.get(1).toLowerCase();
+                        String lowerDesc = row.get(2).toLowerCase();
+                        if(lowerTitle.indexOf(query.toLowerCase()) > -1 || lowerDesc.indexOf(query.toLowerCase()) > -1) {
+                            String dateTime = getDateFromFile(row.get(0));
+                            datum.put("Title", row.get(1));
+                            datum.put("Description", row.get(2));
+                            datum.put("Date Recorded", dateTime);
+                            data.add(datum);
+                        }
+                        idx++;
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                return false;
             }
         });
     }

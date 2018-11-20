@@ -49,7 +49,7 @@ public class EditRecording extends AppCompatActivity {
         }
         final String fileName = info[0];
 
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);

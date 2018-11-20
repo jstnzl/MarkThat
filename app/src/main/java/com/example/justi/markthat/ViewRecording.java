@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class ViewRecording extends AppCompatActivity {
     TextView descText;
     TextView dateText;
     TextView folderName;
+    SearchView searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class ViewRecording extends AppCompatActivity {
         setContentView(R.layout.activity_view_recording);
 
         db = new MyDB(this, null, 1);
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
 
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -68,7 +70,7 @@ public class ViewRecording extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         //Set Title for toolbar
-        getSupportActionBar().setTitle("View Recording");
+        getSupportActionBar().setTitle("Info");
 
         Bundle extras = getIntent().getExtras();
         // file, title, desc, folder
@@ -233,6 +235,41 @@ public class ViewRecording extends AppCompatActivity {
                 mp.seekTo(timeStamp);
                 if(playing)
                     mp.start();
+            }
+        });
+
+        searchBar = findViewById(R.id.search_recording_button);
+        searchBar.setQueryHint("Filter by title or text");
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (dbResults.size() > 0) {
+                    int idx = 0;
+                    data.clear();
+                    while (idx < dbResults.size()) {
+                        Map<String, String> datum = new HashMap<>();
+                        List<String> row = dbResults.get(idx);
+                        // file, title, desc, duration, position
+                        String lowerTitle = row.get(1).toLowerCase();
+                        String lowerDesc = row.get(2).toLowerCase();
+                        if(lowerTitle.indexOf(query.toLowerCase()) > -1 || lowerDesc.indexOf(query.toLowerCase()) > -1) {
+                            start = Long.parseLong(row.get(0).substring(0, row.get(0).length() - 4));
+                            String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
+                            datum.put("Title", row.get(1));
+                            datum.put("Description", row.get(2));
+                            datum.put("Position", pos);
+                            data.add(datum);
+                        }
+                        idx++;
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                return false;
             }
         });
 
