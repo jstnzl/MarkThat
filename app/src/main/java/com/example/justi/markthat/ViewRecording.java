@@ -48,6 +48,10 @@ public class ViewRecording extends AppCompatActivity {
     SimpleAdapter adapter;
     List<Map<String, String>> data = new ArrayList<>();
     long start = 0;
+    TextView titleText;
+    TextView descText;
+    TextView dateText;
+    TextView folderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,7 @@ public class ViewRecording extends AppCompatActivity {
             if(extras.containsKey("RECORDING_INFO"))
                 info = extras.getStringArray("RECORDING_INFO");
         }
+        final String[] recordingInfo = info;
         final String fileName = info[0];
         fileCol = fileName;
 
@@ -81,11 +86,13 @@ public class ViewRecording extends AppCompatActivity {
         TextView durationText = (TextView)findViewById(R.id.duration);
         currentTime = (TextView)findViewById(R.id.current_time);
         currentTime.setText("00:00.000");
-        TextView titleText=(TextView)findViewById(R.id.recording_title);
-        TextView descText=(TextView)findViewById(R.id.recording_desc);
-        TextView dateText=(TextView)findViewById(R.id.recording_date);
+        titleText=(TextView)findViewById(R.id.recording_title);
+        descText=(TextView)findViewById(R.id.recording_desc);
+        dateText=(TextView)findViewById(R.id.recording_date);
+        folderName=(TextView)findViewById(R.id.folder_name);
         titleText.setText(info[1]);
         descText.setText(info[2]);
+        folderName.setText("Folder: "+info[3]);
         dateText.setText(getDateFromFile(fileName));
 
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/" + fileName;
@@ -127,11 +134,6 @@ public class ViewRecording extends AppCompatActivity {
                 seekBar.setProgress(time*5);
             }
         });
-//                Intent intent = new Intent(view.getContext(), ViewRecording.class);
-//                String[] info = new String[dbResults.get(position).size()];
-//                info = dbResults.get(position).toArray(info);
-//                intent.putExtra("RECORDING_INFO", info);
-//                startActivity(intent);
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -145,7 +147,18 @@ public class ViewRecording extends AppCompatActivity {
 
         });
 
-        Button deleteButton = (Button)findViewById(R.id.delete_button);
+        Button editButton = (Button)findViewById(R.id.edit_button);
+        editButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), EditRecording.class);
+                intent.putExtra("RECORDING_INFO", recordingInfo);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+
+            Button deleteButton = (Button)findViewById(R.id.delete_button);
         deleteButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,6 +311,12 @@ public class ViewRecording extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 getData();
                 adapter.notifyDataSetChanged();
+            }
+            if(resultCode == RESULT_FIRST_USER) {
+                String[] callBack = data.getStringArrayExtra("PASS_BACK");
+                titleText.setText(callBack[0]);
+                descText.setText(callBack[1]);
+                folderName.setText(callBack[2]);
             }
         }
     }
