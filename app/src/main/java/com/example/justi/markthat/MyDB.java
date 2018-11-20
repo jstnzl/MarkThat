@@ -41,8 +41,7 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table recordTable(fileName String primary key, title String, description String, folder String);");
-        db.execSQL("create table markTable(file String, title String, description String, duration long, position long, " +
-                    "foreign key(file) references recordTable(fileName) on delete cascade);");
+        db.execSQL("create table markTable(file String, title String, description String, duration long, position long);");
     }
 
     @Override
@@ -174,6 +173,7 @@ public class MyDB extends SQLiteOpenHelper {
         db = getWritableDatabase();
         int deletedRows = 0;
         deletedRows += db.delete("recordTable", "fileName= ?", new String[]{s});
+        db.delete("markTable", "file= ?", new String[]{s});
         return deletedRows > 0;
     }
 
