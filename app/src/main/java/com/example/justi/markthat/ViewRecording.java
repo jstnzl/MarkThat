@@ -280,7 +280,7 @@ public class ViewRecording extends AppCompatActivity {
                         String lowerDesc = row.get(2).toLowerCase();
                         if(lowerTitle.indexOf(query.toLowerCase()) > -1 || lowerDesc.indexOf(query.toLowerCase()) > -1) {
                             start = Long.parseLong(row.get(0).substring(0, row.get(0).length() - 4));
-                            String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
+                            String pos = getFormattedDuration(Integer.parseInt(row.get(3)));
                             datum.put("Title", row.get(1));
                             datum.put("Description", row.get(2));
                             datum.put("Position", pos);
@@ -352,12 +352,11 @@ public class ViewRecording extends AppCompatActivity {
             while (idx < dbResults.size()) {
                 Map<String, String> datum = new HashMap<>();
                 List<String> row = dbResults.get(idx);
-                // file, title, desc, duration, position
+                // file, title, desc, position
                 start = Long.parseLong(row.get(0).substring(0, row.get(0).length()-4));
-                String pos = getFormattedDuration(Integer.parseInt(row.get(4)));
+                String pos = getFormattedDuration(Integer.parseInt(row.get(3)));
                 datum.put("Title", row.get(1));
                 datum.put("Description", row.get(2));
-//                datum.put("Duration", row.get(3));
                 datum.put("Position", pos);
                 data.add(datum);
                 idx++;

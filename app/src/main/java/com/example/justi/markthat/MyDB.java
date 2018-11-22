@@ -41,7 +41,7 @@ public class MyDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table recordTable(fileName String primary key, title String, description String);");
-        db.execSQL("create table markTable(file String, title String, description String, duration long, position long);");
+        db.execSQL("create table markTable(file String, title String, description String, position long);");
     }
 
     @Override
@@ -76,7 +76,6 @@ public class MyDB extends SQLiteOpenHelper {
         cv.put("file", fileName);
         cv.put("title", title);
         cv.put("description", description);
-        cv.put("duration", 0);
         cv.put("position", position);
         db.insert("markTable", null, cv);
     }
@@ -103,13 +102,12 @@ public class MyDB extends SQLiteOpenHelper {
         db = getReadableDatabase();
         Cursor cr = db.rawQuery("select * from markTable where file= ?;", params);
         while(cr.moveToNext()){
-            // file, title, desc, duration, position
+            // file, title, desc, position
             ArrayList<String> temp = new ArrayList<>();
             temp.add(cr.getString(0));
             temp.add(cr.getString(1));
             temp.add(cr.getString(2));
             temp.add(cr.getString(3));
-            temp.add(cr.getString(4));
             res.add(temp);
         }
         cr.close();
