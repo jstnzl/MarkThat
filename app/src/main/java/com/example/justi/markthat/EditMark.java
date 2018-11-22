@@ -51,13 +51,13 @@ public class EditMark extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         // file, title, desc, folder
-        String[] info = new String[4];
+        String[] info = new String[3];
         if(extras != null) {
             if(extras.containsKey("MARK_INFO"))
                 info = extras.getStringArray("MARK_INFO");
         }
         final String fileName = info[0];
-        final String position = info[4];
+        final String position = info[3];
 
 //        Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
