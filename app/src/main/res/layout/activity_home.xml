@@ -9,12 +9,13 @@
     tools:layout_editor_absoluteY="81dp">
 
 
-    //toolbar
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar">
 
      </include>
+
+
 
     <View
         android:layout_width="wrap_content"

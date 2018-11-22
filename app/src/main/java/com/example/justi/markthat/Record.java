@@ -1,10 +1,16 @@
 package com.example.justi.markthat;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -28,6 +35,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
@@ -44,6 +53,8 @@ public class Record extends AppCompatActivity {
     EditText description;
     String fileName;
     long startTime;
+    ImageView recordingIndicator;
+    ObjectAnimator anim;
 
     String[] permissions = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -62,8 +73,19 @@ public class Record extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Set Title for toolbar
         getSupportActionBar().setTitle("Record");
+        Stetho.initializeWithDefaults(this);
 
-//        Stetho.initializeWithDefaults(this);
+        //recording indicator
+        recordingIndicator = (ImageView) findViewById(R.id.recording_ind);
+        // ObjectAnimator to animate
+        anim = ObjectAnimator.ofInt(recordingIndicator, "alpha", Color.WHITE, Color.RED, Color.WHITE);
+        anim.setDuration(1000);
+        anim.setEvaluator(new ArgbEvaluator());
+        anim.setRepeatMode(ValueAnimator.REVERSE);
+//        txt = (TextView) findViewById(R.id.txt);
+
+        Stetho.initializeWithDefaults(this);
+
         db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
         final FloatingActionButton markButton = (FloatingActionButton) findViewById(R.id.markButton);
@@ -73,18 +95,21 @@ public class Record extends AppCompatActivity {
         description = findViewById(R.id.description);
     }
 
-    private View.OnClickListener buttonListeners = new View.OnClickListener() {
+    public View.OnClickListener buttonListeners = new View.OnClickListener() {
         public void onClick(View v) {
             switch (v.getId() /*to get clicked view id**/) {
                 case R.id.toggleRecordButton:
                     if(recording){
                         stopRecording(false);
                         recording = false;
+                        anim.end();
                     }
                     else {
                         if(hasPermissions()) {
                             startRecording();
                             recording = true;
+                            anim.setRepeatCount(Animation.INFINITE);
+                            anim.start();
                         }
                         else {
                             requestPermissions();
@@ -103,6 +128,7 @@ public class Record extends AppCompatActivity {
             }
         }
     };
+
 
     private void markIt() {
         db.insertMark(startTime+".mp4", "", "", System.currentTimeMillis()-startTime);
