@@ -42,7 +42,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="421dp"
-        android:layout_height="280dp"
+        android:layout_height="200dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
@@ -205,19 +205,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/app_bar"
-        app:layout_constraintTop_toBottomOf="@+id/SeekBar"
-        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintTop_toBottomOf="@+id/waveView"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/play_icon" />
 
-    <SeekBar
-        android:id="@+id/SeekBar"
-        android:layout_width="347dp"
-        android:layout_height="57dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <rm.com.audiowave.AudioWaveView
+        android:id="@+id/waveView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        app:animateExpansion="false"
+        app:chunkWidth="3dp"
+        app:chunkHeight="30dp"
+        app:minChunkHeight="3dp"
+        app:chunkSpacing="1dp"
+        app:chunkRadius="1dp"
+        app:touchable="true"
+        app:waveColor="@drawable/gradients"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0"
+        />
 
 
     <TextView
@@ -231,8 +241,8 @@
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintEnd_toStartOf="@+id/playButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SeekBar"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintTop_toBottomOf="@+id/waveView"
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/duration"
@@ -245,8 +255,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toEndOf="@+id/playButton"
-        app:layout_constraintTop_toBottomOf="@+id/SeekBar"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintTop_toBottomOf="@+id/waveView"
+        app:layout_constraintVertical_bias="0.02" />
 
     <!--Second half-->
     <LinearLayout
@@ -258,13 +268,13 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintTop_toBottomOf="@+id/playButton">
 
         <TextView
             android:id="@+id/marks_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-black"
             android:paddingLeft="12dp"
