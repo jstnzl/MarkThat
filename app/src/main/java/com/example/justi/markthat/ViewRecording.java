@@ -401,6 +401,8 @@ public class ViewRecording extends AppCompatActivity {
     }
 
     public void pausePlayback() {
+        if(!playing)
+            return;
         playing = false;
         mp.pause();
         timeStamp = mp.getCurrentPosition();
