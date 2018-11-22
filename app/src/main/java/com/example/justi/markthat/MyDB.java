@@ -40,7 +40,7 @@ public class MyDB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table recordTable(fileName String primary key, title String, description String, folder String);");
+        db.execSQL("create table recordTable(fileName String primary key, title String, description String);");
         db.execSQL("create table markTable(file String, title String, description String, duration long, position long);");
     }
 
@@ -63,7 +63,6 @@ public class MyDB extends SQLiteOpenHelper {
         cv.put("fileName", fileName);
         cv.put("title", title);
         cv.put("description", description);
-        cv.put("folder", "None");
         db.insert("recordTable", null, cv);
     }
 
@@ -88,11 +87,10 @@ public class MyDB extends SQLiteOpenHelper {
         Cursor cr = db.rawQuery("select * from recordTable;", null );
         while(cr.moveToNext()){
             ArrayList<String> temp = new ArrayList<>();
-            // file, title, desc, folder
+            // file, title, desc
             temp.add(cr.getString(0));
             temp.add(cr.getString(1));
             temp.add(cr.getString(2));
-            temp.add(cr.getString(3));
             res.add(temp);
         }
         cr.close();
@@ -125,11 +123,10 @@ public class MyDB extends SQLiteOpenHelper {
         Cursor cr = db.rawQuery("select * from recordTable where title= ? or desciption= ?;", params );
         while(cr.moveToNext()){
             ArrayList<String> temp = new ArrayList<>();
-            // file, title, desc, folder
+            // file, title, desc
             temp.add(cr.getString(0));
             temp.add(cr.getString(1));
             temp.add(cr.getString(2));
-            temp.add(cr.getString(3));
             res.add(temp);
         }
         cr.close();
@@ -152,12 +149,11 @@ public class MyDB extends SQLiteOpenHelper {
         return (int)count;
     }
 
-    public void updateRecord(String file, String s1, String s2, String s3){
+    public void updateRecord(String file, String s1, String s2 ){
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("title", s1);
         cv.put("description", s2);
-        cv.put("folder", s3);
         db.update("recordTable", cv,  "fileName = ?", new String[]{file});
     }
 

@@ -59,7 +59,6 @@ public class ViewRecording extends AppCompatActivity {
     TextView titleText;
     TextView descText;
     TextView dateText;
-    TextView folderName;
     SearchView searchBar;
     String filePath;
     byte[] audioData;
@@ -82,8 +81,8 @@ public class ViewRecording extends AppCompatActivity {
         getSupportActionBar().setTitle("Info");
 
         Bundle extras = getIntent().getExtras();
-        // file, title, desc, folder
-        String[] info = new String[4];
+        // file, title, desc
+        String[] info = new String[3];
         if(extras != null) {
             if(extras.containsKey("RECORDING_INFO"))
                 info = extras.getStringArray("RECORDING_INFO");
@@ -100,10 +99,8 @@ public class ViewRecording extends AppCompatActivity {
         titleText=(TextView)findViewById(R.id.recording_title);
         descText=(TextView)findViewById(R.id.recording_desc);
         dateText=(TextView)findViewById(R.id.recording_date);
-        folderName=(TextView)findViewById(R.id.folder_name);
         titleText.setText(info[1]);
         descText.setText(info[2]);
-        folderName.setText("Folder: "+info[3]);
         dateText.setText(getDateFromFile(fileName));
 
         filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/" + fileName;
@@ -379,7 +376,6 @@ public class ViewRecording extends AppCompatActivity {
                 String[] callBack = data.getStringArrayExtra("PASS_BACK");
                 titleText.setText(callBack[0]);
                 descText.setText(callBack[1]);
-                folderName.setText(callBack[2]);
             }
         }
     }
@@ -401,6 +397,8 @@ public class ViewRecording extends AppCompatActivity {
     }
 
     public void pausePlayback() {
+        if(!playing)
+            return;
         playing = false;
         mp.pause();
         timeStamp = mp.getCurrentPosition();
