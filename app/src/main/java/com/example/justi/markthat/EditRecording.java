@@ -23,9 +23,7 @@ public class EditRecording extends AppCompatActivity {
     Toolbar toolbar;
     EditText title;
     EditText description;
-    EditText folder;
     Button saveButton;
-    Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,7 @@ public class EditRecording extends AppCompatActivity {
         getSupportActionBar().setTitle("Edit Recording");
 
         Bundle extras = getIntent().getExtras();
-        // file, title, desc, folder
+        // file, title, desc
         String[] info = new String[4];
         if(extras != null) {
             if(extras.containsKey("RECORDING_INFO"))
@@ -53,18 +51,15 @@ public class EditRecording extends AppCompatActivity {
         db = new MyDB(this, null, 1);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
-        folder = findViewById(R.id.folder);
         title.setText(info[1]);
         description.setText(info[2]);
-        folder.setText(info[3]);
         saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String s1 = title.getText().toString();
                 String s2 = description.getText().toString();
-                String s3 = folder.getText().toString();
-                db.updateRecord(fileName, s1, s2, s3);
+                db.updateRecord(fileName, s1, s2);
                 Toast.makeText(getApplicationContext(), "Record updated", Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
@@ -82,7 +77,6 @@ public class EditRecording extends AppCompatActivity {
         String[] info = new String[3];
         info[0] = title.getText().toString();
         info[1] = description.getText().toString();
-        info[2] = folder.getText().toString();
         intent.putExtra("PASS_BACK", info);
         setResult(RESULT_FIRST_USER, intent);
         finish();

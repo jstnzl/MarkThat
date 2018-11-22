@@ -58,6 +58,7 @@
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@android:color/white"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,45 +92,19 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/relativeLayout1"
+            <TextView
+                android:id="@+id/recording_desc"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/white"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <TextView
-                    android:id="@+id/recording_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:fontFamily="sans-serif-black"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="12dp"
-                    android:paddingBottom="8dp"
-                    android:text="Description"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-                <TextView
-                    android:id="@+id/folder_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:fontFamily="sans-serif-black"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="12dp"
-                    android:paddingBottom="8dp"
-                    android:text="Folder: N/A"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
+                android:fontFamily="sans-serif-black"
+                android:paddingLeft="12dp"
+                android:paddingTop="10dp"
+                android:paddingRight="12dp"
+                android:paddingBottom="8dp"
+                android:text="Description"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
