@@ -25,6 +25,11 @@ import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -33,12 +38,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import rm.com.audiowave.AudioWaveView;
+import rm.com.audiowave.OnProgressListener;
 
 public class ViewRecording extends AppCompatActivity {
     MyDB db;
     boolean playing = false;
     private MediaPlayer mp;
-    private SeekBar seekBar;
+    private AudioWaveView waveView;
     int timeStamp = 0;
     int maxDuration = -1;
     String fileCol;
@@ -54,6 +61,8 @@ public class ViewRecording extends AppCompatActivity {
     TextView dateText;
     TextView folderName;
     SearchView searchBar;
+    String filePath;
+    byte[] audioData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +93,7 @@ public class ViewRecording extends AppCompatActivity {
         fileCol = fileName;
 
         // Set textviews to info passed in by home
-        seekBar = (SeekBar) findViewById(R.id.SeekBar);
+        waveView = (AudioWaveView) findViewById(R.id.waveView);
         TextView durationText = (TextView)findViewById(R.id.duration);
         currentTime = (TextView)findViewById(R.id.current_time);
         currentTime.setText("00:00.000");
@@ -97,11 +106,12 @@ public class ViewRecording extends AppCompatActivity {
         folderName.setText("Folder: "+info[3]);
         dateText.setText(getDateFromFile(fileName));
 
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/" + fileName;
+        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/" + fileName;
+        audioData = fileToBytes();
+        waveView.setRawData(audioData);
         mp = new MediaPlayer();
         try { mp.setDataSource(filePath); } catch (Exception e) {};
         try { mp.prepare(); } catch (Exception e) {};
-        seekBar.setMax(mp.getDuration()*5);
         maxDuration = mp.getDuration();
         durationText.setText(getFormattedDuration(maxDuration));
         myListView = (ListView)findViewById(R.id.recording_listview);
@@ -121,6 +131,7 @@ public class ViewRecording extends AppCompatActivity {
                 String[] info = new String[dbResults.get(position).size()];
                 info = dbResults.get(position).toArray(info);
                 intent.putExtra("MARK_INFO", info);
+                pausePlayback();
                 startActivityForResult(intent, 1);
                 return true;
             }
@@ -133,7 +144,8 @@ public class ViewRecording extends AppCompatActivity {
                 int time = Integer.parseInt(dbResults.get(position).get(4));
                 timeStamp = time;
                 mp.seekTo(time);
-                seekBar.setProgress(time*5);
+                float v = ((float)time/(float)maxDuration) * 100;
+                waveView.setProgress(v);
             }
         });
 
@@ -144,7 +156,7 @@ public class ViewRecording extends AppCompatActivity {
                 playButton.setImageResource(R.drawable.play_icon);
                 timeStamp = 0;
                 mp.seekTo(timeStamp);
-                seekBar.setProgress(timeStamp);
+                waveView.setProgress(0);
             }
 
         });
@@ -155,6 +167,7 @@ public class ViewRecording extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditRecording.class);
                 intent.putExtra("RECORDING_INFO", recordingInfo);
+                pausePlayback();
                 startActivityForResult(intent, 1);
             }
         });
@@ -176,6 +189,7 @@ public class ViewRecording extends AppCompatActivity {
         deleteButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pausePlayback();
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setCancelable(true);
                 builder.setTitle("Delete this recording?");
@@ -209,15 +223,11 @@ public class ViewRecording extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(playing) {
-                    playing = false;
-                    mp.pause();
-                    timeStamp = mp.getCurrentPosition();
-                    playButton.setImageResource(R.drawable.play_icon);
-                    Toast.makeText(getApplicationContext(), "Pausing", Toast.LENGTH_SHORT).show();
+                    pausePlayback();
                 }
                 else {
                     playing = true;
-                    mp.seekTo(timeStamp);
+//                    mp.seekTo(timeStamp);
                     mp.start();
                     updateSeekBar();
                     playButton.setImageResource(R.drawable.stop_icon);
@@ -227,26 +237,28 @@ public class ViewRecording extends AppCompatActivity {
             }
         });
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        waveView.setOnProgressListener(new OnProgressListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                timeStamp = i/5;
-                currentTime.setText(getFormattedDuration(timeStamp));
-                if(!playing)
-                    mp.seekTo(timeStamp);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTracking(float v) {
                 if(playing)
                     mp.pause();
+                mp.seekTo(timeStamp);
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTracking(float v) {
                 mp.seekTo(timeStamp);
                 if(playing)
                     mp.start();
+            }
+
+            @Override
+            public void onProgressChanged(float v, boolean b) {
+                float realPercent = v/(float)100.00;
+                timeStamp = (int)(maxDuration * realPercent);
+                currentTime.setText(getFormattedDuration(timeStamp));
+                if (!playing)
+                    mp.seekTo(timeStamp);
             }
         });
 
@@ -284,7 +296,6 @@ public class ViewRecording extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 
     public String getDateFromFile(String file) {
@@ -299,7 +310,6 @@ public class ViewRecording extends AppCompatActivity {
         if(mp != null)
             mp.stop();
         refreshActivity();
-        super.onBackPressed();
     }
 
     public void refreshActivity() {
@@ -312,14 +322,16 @@ public class ViewRecording extends AppCompatActivity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            updateSeekBar();
+            if(playing)
+                updateSeekBar();
         }
     };
 
     private void updateSeekBar() {
-        seekBar.setProgress(mp.getCurrentPosition()*5);
+        float v = (float)mp.getCurrentPosition()/(float)maxDuration * 100;
+        waveView.setProgress(v);
 //        txtCurrentTime.setText(milliSecondsToTimer(mp.getCurrentPosition()));
-        seekBar.postDelayed(runnable, 50);
+        waveView.postDelayed(runnable, 50);
     }
 
     private String getFormattedDuration(int duration) {
@@ -329,6 +341,8 @@ public class ViewRecording extends AppCompatActivity {
         int seconds = (duration/1000)%60;
         String s2 = seconds > 9 ? seconds+"" : "0"+seconds;
         String s3 = duration - minutes*1000 - seconds*1000 +"";
+        s3 = s3 + "000";
+        s3 = s3.substring(0,3);
         sb.append(s1+":"+s2+"."+s3);
         return sb.toString();
     }
@@ -368,5 +382,31 @@ public class ViewRecording extends AppCompatActivity {
                 folderName.setText(callBack[2]);
             }
         }
+    }
+
+    public byte[] fileToBytes() {
+        File file = new File(filePath);
+        int size = (int) file.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
+    public void pausePlayback() {
+        if(!playing)
+            return;
+        playing = false;
+        mp.pause();
+        timeStamp = mp.getCurrentPosition();
+        playButton.setImageResource(R.drawable.play_icon);
+        Toast.makeText(getApplicationContext(), "Pausing", Toast.LENGTH_SHORT).show();
     }
 }
