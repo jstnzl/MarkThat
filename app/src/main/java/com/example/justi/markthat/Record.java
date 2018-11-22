@@ -63,7 +63,7 @@ public class Record extends AppCompatActivity {
         //Set Title for toolbar
         getSupportActionBar().setTitle("Record");
 
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         final FloatingActionButton recordButton = (FloatingActionButton) findViewById(R.id.toggleRecordButton);
         final FloatingActionButton markButton = (FloatingActionButton) findViewById(R.id.markButton);

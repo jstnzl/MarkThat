@@ -59,7 +59,7 @@ public class EditMark extends AppCompatActivity {
         final String fileName = info[0];
         final String position = info[4];
 
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
         db = new MyDB(this, null, 1);
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
