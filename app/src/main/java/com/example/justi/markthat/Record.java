@@ -53,7 +53,8 @@ public class Record extends AppCompatActivity {
     EditText description;
     String fileName;
     long startTime;
-    ImageView myImageView;
+    ImageView recordingIndicator;
+    ObjectAnimator anim;
 
     String[] permissions = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -75,7 +76,12 @@ public class Record extends AppCompatActivity {
         Stetho.initializeWithDefaults(this);
 
         //recording indicator
-        myImageView = (ImageView) findViewById(R.id.recording_ind);
+        recordingIndicator = (ImageView) findViewById(R.id.recording_ind);
+        // ObjectAnimator to animate
+        anim = ObjectAnimator.ofInt(recordingIndicator, "alpha", Color.WHITE, Color.RED, Color.WHITE);
+        anim.setDuration(1000);
+        anim.setEvaluator(new ArgbEvaluator());
+        anim.setRepeatMode(ValueAnimator.REVERSE);
 //        txt = (TextView) findViewById(R.id.txt);
 
         Stetho.initializeWithDefaults(this);
@@ -91,20 +97,12 @@ public class Record extends AppCompatActivity {
 
     public View.OnClickListener buttonListeners = new View.OnClickListener() {
         public void onClick(View v) {
-            String flag;
-            // ObjectAnimator to animate
-            ObjectAnimator anim = ObjectAnimator.ofInt(myImageView, "alpha", Color.WHITE, Color.RED, Color.WHITE);
-            anim.setDuration(500);
-            anim.setEvaluator(new ArgbEvaluator());
-            anim.setRepeatMode(ValueAnimator.REVERSE);
 
             switch (v.getId() /*to get clicked view id**/) {
                 case R.id.toggleRecordButton:
                     if(recording){
                         stopRecording(false);
                         recording = false;
-                        flag = "false";
-
                         //won't work not too sure
                         anim.cancel();
                         anim.end();
@@ -113,7 +111,6 @@ public class Record extends AppCompatActivity {
                         if(hasPermissions()) {
                             startRecording();
                             recording = true;
-                            flag = "true";
                             anim.setRepeatCount(Animation.INFINITE);
                             anim.start();
                         }
