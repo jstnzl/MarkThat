@@ -97,14 +97,11 @@ public class Record extends AppCompatActivity {
 
     public View.OnClickListener buttonListeners = new View.OnClickListener() {
         public void onClick(View v) {
-
             switch (v.getId() /*to get clicked view id**/) {
                 case R.id.toggleRecordButton:
                     if(recording){
                         stopRecording(false);
                         recording = false;
-                        //won't work not too sure
-                        anim.cancel();
                         anim.end();
                     }
                     else {
