@@ -1,10 +1,8 @@
 package com.example.justi.markthat;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,13 +10,8 @@ import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
-
-import com.facebook.stetho.Stetho;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+//import com.facebook.stetho.Stetho;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 
 public class Home extends AppCompatActivity {
     MyDB db;

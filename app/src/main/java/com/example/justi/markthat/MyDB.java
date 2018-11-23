@@ -6,23 +6,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +42,6 @@ public class MyDB extends SQLiteOpenHelper {
             description = "No description yet";
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
-        Log.i("desc1", description);
         cv.put("fileName", fileName);
         cv.put("title", title);
         cv.put("description", description);
@@ -175,6 +157,13 @@ public class MyDB extends SQLiteOpenHelper {
         db = getWritableDatabase();
         int deletedRows = 0;
         deletedRows += db.delete("markTable", "file= ? AND position=?", new String[]{s, s1});
+        return deletedRows > 0;
+    }
+
+    public boolean deleteMarksForRecord(String s){
+        db = getWritableDatabase();
+        int deletedRows = 0;
+        deletedRows += db.delete("markTable", "file= ?", new String[]{s});
         return deletedRows > 0;
     }
 
