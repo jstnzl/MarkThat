@@ -3,28 +3,20 @@ package com.example.justi.markthat;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.stetho.Stetho;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -114,7 +106,7 @@ public class ViewRecording extends AppCompatActivity {
         myListView = (ListView)findViewById(R.id.recording_listview);
 
         getData();
-        adapter = new SimpleAdapter(this, data, R.layout.view_recording_list_row,
+        adapter = new SimpleAdapter(this, data, R.layout.marks_list_row,
                 new String[] {"Title", "Description", "Position"},
                 new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowPosition });
         myListView.setAdapter(adapter);

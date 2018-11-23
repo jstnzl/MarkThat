@@ -1,30 +1,19 @@
 package com.example.justi.markthat;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
-import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.facebook.stetho.Stetho;
-
-import java.io.File;
-import java.io.IOException;
+//import com.facebook.stetho.Stetho;
 
 public class EditMark extends AppCompatActivity {
     private boolean recording = false;

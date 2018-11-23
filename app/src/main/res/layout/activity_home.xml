@@ -43,181 +43,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.833" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="421dp"
-        android:layout_height="210dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|right"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/folders_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="sans-serif-black"
-                android:paddingLeft="12dp"
-                android:paddingTop="8dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="8dp"
-                android:text="Folders"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.06"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.515" />
-
-            <Button
-                android:id="@+id/addFolder_btn"
-                android:layout_width="287dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="#0000"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/newFolder"
-                android:textAllCaps="false"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                android:paddingLeft="200dp"
-
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.12" />
-
-        </LinearLayout>
-
-        <HorizontalScrollView
-            android:id="@+id/horizScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="105dp"
-            android:layout_marginLeft="0dp"
-            android:scrollbars="none">
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="2dp">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card1"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="16dp"
-                    android:padding="2dp"
-                    app:cardBackgroundColor="@drawable/gradients"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp">
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card2"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:padding="2dp"
-                    app:cardBackgroundColor="@drawable/gradients"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp">
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card3"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:padding="2dp"
-                    app:cardBackgroundColor="@drawable/gradients"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp">
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card4"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:padding="2dp"
-                    app:cardBackgroundColor="@drawable/gradients"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp">
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card5"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:padding="2dp"
-                    app:cardBackgroundColor="@drawable/gradients"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp">
-
-                </android.support.v7.widget.CardView>
-
-
-                <!--</android.support.v7.widget.CardView>-->
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <Button
-            android:id="@+id/seeMore_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="#0000"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/seeMore"
-            android:textAllCaps="false"
-            android:textColor="@color/grey"
-            android:textSize="14sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.12" />
-
-    </LinearLayout>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/record_button"
         android:layout_width="wrap_content"
@@ -237,26 +62,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-
+        android:layout_marginTop="60dp"
         android:layout_weight="1.0"
         android:background="@android:color/white"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/recent_recordings_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="sans-serif-black"
-            android:paddingLeft="12dp"
             android:paddingTop="8dp"
             android:paddingRight="12dp"
             android:text="Recordings"
@@ -272,7 +95,7 @@
         <ListView
             android:id="@+id/recording_listview"
             android:layout_width="wrap_content"
-            android:layout_height="305dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
