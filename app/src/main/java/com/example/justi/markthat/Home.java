@@ -1,6 +1,8 @@
 package com.example.justi.markthat;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.SimpleAdapter;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 //import com.facebook.stetho.Stetho;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,14 +52,27 @@ public class Home extends AppCompatActivity {
         dbResults = db.getAllRecords();
         myListView = (ListView)findViewById(R.id.recording_listview);
         if (dbResults.size() > 0) {
+            MediaPlayer mp = new MediaPlayer();
             int idx = 0;
             while (idx < dbResults.size()) {
                 Map<String, String> datum = new HashMap<>();
                 List<String> row = dbResults.get(idx);
                 String dateTime = getDateFromFile(row.get(0));
+                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MarkThat/" + row.get(0);
+                int duration = 0;
+                try {
+                    mp.setDataSource(filePath);
+                    mp.prepare();
+                    duration = mp.getDuration();
+                    mp.reset();
+                }
+                catch(IOException e) {}
+                int marks = db.countMarks(row.get(0));
                 datum.put("Title", row.get(1));
                 datum.put("Description", row.get(2));
                 datum.put("Date Recorded", dateTime);
+                datum.put("Num Marks", marks+" Marks");
+                datum.put("Duration", getFormattedDuration(duration));
                 data.add(datum);
                 idx++;
             }
@@ -64,8 +80,8 @@ public class Home extends AppCompatActivity {
         else
             Toast.makeText(getApplicationContext(), "You have no recordings yet!", Toast.LENGTH_SHORT).show();
         adapter = new SimpleAdapter(this, data, R.layout.home_list_row,
-                new String[] {"Title", "Description", "Date Recorded"},
-                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDate });
+                new String[] {"Title", "Description", "Date Recorded", "Num Marks", "Duration"},
+                new int[] {R.id.rowTitle, R.id.rowDesc, R.id.rowDate, R.id.numMarks, R.id.duration });
         myListView.setAdapter(adapter);
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -129,5 +145,18 @@ public class Home extends AppCompatActivity {
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeMillis), ZoneId.systemDefault());
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         return dateTime.format(dateFormat);
+    }
+
+    private String getFormattedDuration(int duration) {
+        StringBuilder sb = new StringBuilder();
+        int minutes = (duration/1000)/60;
+        String s1 = minutes > 9 ? minutes+"" : "0"+minutes;
+        int seconds = (duration/1000)%60;
+        String s2 = seconds > 9 ? seconds+"" : "0"+seconds;
+        String s3 = duration - minutes*1000 - seconds*1000 +"";
+        s3 = s3 + "000";
+        s3 = s3.substring(0,3);
+        sb.append(s1+":"+s2+"."+s3);
+        return sb.toString();
     }
 }

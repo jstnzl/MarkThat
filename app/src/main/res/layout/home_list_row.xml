@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/rowTitle"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="Title"
@@ -13,7 +13,7 @@
 
     <TextView
         android:id="@+id/rowDesc"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="13sp"
         android:text="Description"
@@ -21,11 +21,33 @@
 
     <TextView
         android:id="@+id/rowDate"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:textSize="13sp"
         android:text="Date Recorded"
         android:layout_below="@+id/rowDesc"/>
+
+    <TextView
+        android:id="@+id/numMarks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="Num Marks"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/rowTitle"/>
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:text="Duration"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/numMarks"
+        android:layout_toRightOf="@+id/rowDesc"/>
 
 </RelativeLayout>
