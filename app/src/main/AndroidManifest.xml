@@ -26,6 +26,7 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".EditMark"></activity>
+        <activity android:name=".EditMarkWhileRecording"></activity>
         <activity android:name=".EditRecording"></activity>
     </application>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>

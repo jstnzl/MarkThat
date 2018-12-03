@@ -98,7 +98,7 @@ public class Record extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Intent intent = new Intent(view.getContext(), EditMark.class);
+                Intent intent = new Intent(view.getContext(), EditMarkWhileRecording.class);
                 String[] info = new String[dbResults.get(position).size()];
                 info = dbResults.get(position).toArray(info);
                 intent.putExtra("MARK_INFO", info);
