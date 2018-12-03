@@ -137,12 +137,13 @@ public class MyDB extends SQLiteOpenHelper {
         db.update("recordTable", cv,  "fileName = ?", new String[]{file});
     }
 
-    public void updateMark(String file, String pos, String s1, String s2){
+    public void updateMark(String file, String origPos, String s1, String s2, String s3){
         db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("title", s1);
         cv.put("description", s2);
-        db.update("markTable", cv,  "file = ? AND position=?", new String[]{file, pos});
+        cv.put("position", s3);
+        db.update("markTable", cv,  "file = ? AND position=?", new String[]{file, origPos});
     }
 
     public boolean deleteRecord(String s){
