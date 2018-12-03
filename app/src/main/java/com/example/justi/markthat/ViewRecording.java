@@ -130,7 +130,7 @@ public class ViewRecording extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                int time = Integer.parseInt(dbResults.get(position).get(4));
+                int time = Integer.parseInt(dbResults.get(position).get(3));
                 timeStamp = time;
                 mp.seekTo(time);
                 float v = ((float)time/(float)maxDuration) * 100;
